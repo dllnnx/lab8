@@ -1,8 +1,5 @@
 package commandManagement
 
-import lombok.Getter
-import lombok.Setter
-
 /**
  * Класс для вывода в стандартную консоль.
  * @author dllnnx

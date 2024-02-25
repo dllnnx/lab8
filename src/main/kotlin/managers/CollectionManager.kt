@@ -1,18 +1,13 @@
 package managers
 
 import exceptions.NoSuchIdException
-import lombok.Getter
 import objects.Person
 import java.util.*
-import java.util.function.Function
-import java.util.function.Predicate
-import java.util.stream.Collectors
 
 /**
  * Менеджер коллекции.
  * @author dllnnx
  */
-@Getter
 class CollectionManager {
     /**
      * Дата инициализации коллекции

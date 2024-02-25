@@ -1,12 +1,10 @@
 plugins {
     kotlin("jvm") version "1.9.0"
     application
-    kotlin("plugin.lombok") version "1.9.22"
-    id("io.freefair.lombok") version "8.1.0"
 }
 
 group = "labs"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 repositories {
     mavenCentral()
@@ -14,8 +12,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    implementation("com.google.code.gson:gson:2.7")
+    implementation("com.google.code.gson:gson:2.9.1")
 }
 
 tasks.test {
@@ -29,5 +26,6 @@ kotlin {
 application {
     mainClass.set("MainKt")
 }
+
 
 

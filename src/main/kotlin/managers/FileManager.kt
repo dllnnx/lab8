@@ -3,7 +3,6 @@ package managers
 import com.google.gson.stream.JsonWriter
 import commandManagement.Console
 import commandManagement.ConsoleColor
-import lombok.RequiredArgsConstructor
 import objects.Person
 import java.io.File
 import java.io.FileNotFoundException

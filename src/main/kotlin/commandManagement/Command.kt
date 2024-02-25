@@ -1,7 +1,5 @@
 package commandManagement
 
-import lombok.AllArgsConstructor
-import lombok.Getter
 import java.util.*
 
 /**
@@ -9,7 +7,6 @@ import java.util.*
  * @author dllnnx
  */
 abstract class Command (var name: String, private var description: String): CommandInterface {
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || javaClass != other.javaClass) return false

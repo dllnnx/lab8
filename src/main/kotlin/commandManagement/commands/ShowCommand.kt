@@ -21,7 +21,9 @@ class ShowCommand(private val console: Console, private val collectionManager: C
                 console.printError("Коллекция пуста!")
                 return
             }
-            console.println(collection.toString())
+            for (person in collection){
+                console.println(person.toString() + "\n")
+            }
         } else console.printError("Для этой команды не требуются аргументы!")
     }
 }
