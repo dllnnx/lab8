@@ -12,10 +12,10 @@ class Person (
     var id: Long,
     var name: String,
     var coordinates: Coordinates,
-    var creationDate: ZonedDateTime,
+    private var creationDate: ZonedDateTime,
     var height: Int,
-    var eyeColor: EyeColor,
-    var hairColor: HairColor,
+    private var eyeColor: EyeColor,
+    private var hairColor: HairColor,
     var nationality: Country,
     var location: Location
 ) : Comparable<Person?>{

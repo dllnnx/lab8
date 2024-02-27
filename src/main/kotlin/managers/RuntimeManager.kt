@@ -20,7 +20,7 @@ class RuntimeManager constructor(var console: Printable, private var commandMana
         console.println("Чтобы увидеть список допустимых команд, введите help")
         while (true) {
             try {
-                console.print("$ ")
+                console.print("\uD83E\uDD9B ")
                 val userCommand = userScanner.nextLine().trim()
                 launch(userCommand.split(" "))
             } catch (e: NoSuchElementException) {

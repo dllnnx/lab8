@@ -50,12 +50,12 @@ class ExecuteScriptCommand(
                     }
                 }
 
-                console.println(ConsoleColor.setConsoleColor("Выполнение команды " + command[0] + "...",
-                    ConsoleColor.CYAN))
                 if (commandManager.commands[command[0]] != null) {
+                    console.println(ConsoleColor.setConsoleColor("Выполнение команды " + command[0] + "...",
+                        ConsoleColor.CYAN))
                     commandManager.execute((command[0]), command.slice(1..<command.size))
                 } else {
-                    console.printError("Такой команды нет!( Попробуйте еще раз!)).")
+                    console.printError("Вызываемой в скрипте команды не существует!")
                 }
                 if ((command[0] == "execute_script")) {
                     Console.fileMode = true
@@ -65,7 +65,6 @@ class ExecuteScriptCommand(
             ScriptManager.removeFile()
         } catch (e: FileNotFoundException) {
             console.printError("Такой файл не найден((")
-        } catch (ignored: NoSuchElementException) {
         }
         Console.fileMode = false
     }
