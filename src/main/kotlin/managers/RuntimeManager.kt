@@ -22,11 +22,12 @@ class RuntimeManager constructor(var console: Printable, private var commandMana
             try {
                 console.print("\uD83E\uDD9B ")
                 val userCommand = userScanner.nextLine().trim()
-                launch(userCommand.split(" "))
+                val command = userCommand.split(" ")
+                if (command.isNotEmpty()){
+                    launch(command)
+                }
             } catch (e: NoSuchElementException) {
-                console.printError("Конец ввода... До свидания!))")
                 exitProcess(0)
-            } catch (ignored: ArrayIndexOutOfBoundsException) {
             }
         }
     }
