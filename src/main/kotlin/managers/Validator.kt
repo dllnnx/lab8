@@ -24,7 +24,7 @@ class Validator {
      * @return true, если объект валидный, иначе false
      */
     private fun validateLocation(location: Location): Boolean {
-        return location.x != null && location.y != null && (location.name == null || location.name.length <= 889)
+        return location.name == null || location.name?.length!! <= 889
     }
 
     /**
@@ -32,14 +32,11 @@ class Validator {
      * @param person Проверяемый экземпляр
      * @return true, если объект валидный, иначе false
      */
+
     fun validatePerson(person: Person): Boolean {
-        return person.name != null && person.name.isNotBlank()
+        return person.name.isNotBlank()
                 && validateCoordinates(person.coordinates)
-                && person.creationDate != null
-                && person.height != null && person.height > 0
-                && person.eyeColor != null
-                && person.hairColor != null
-                && person.nationality != null
+                && person.height > 0
                 && validateLocation(person.location)
     }
 }

@@ -82,8 +82,10 @@ class FileManager (private var console: Console, private var collectionManager: 
                 }
             }
         } catch (e: FileNotFoundException) {
-            console.printError("Такого файла не существует(((")
+            console.printError("Такого файла не существует :(")
         } catch (e: IllegalArgumentException) {
+            console.printError("Данные в файле невалидны! Коллекция не заполнена :((")
+        } catch (e: NullPointerException){
             console.printError("Данные в файле невалидны! Коллекция не заполнена :((")
         }
     }
