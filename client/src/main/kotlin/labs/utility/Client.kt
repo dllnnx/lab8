@@ -3,25 +3,24 @@ package labs.utility
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
+import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.Socket
 import java.util.*
 
-class Client (host: String, port: Int, console: Printable) {
-    val host = host
-    val port = port
-    lateinit var socket: Socket
-    var serverWriter: ObjectOutputStream? = null
-    var serverReader: ObjectInputStream? = null
+class Client (private val host: String, private val port: Int, console: Printable) {
+    private lateinit var socket: Socket
+    private var serverWriter: ObjectOutputStream? = null
+    private var serverReader: ObjectInputStream? = null
 
-    fun connectToServer(){
+    private fun connectToServer(){
         socket = Socket(host, port)
         serverWriter = ObjectOutputStream(socket.getOutputStream())
         serverReader = ObjectInputStream(socket.getInputStream())
     }
 
-    fun disconnectFromServer(){
+    private fun disconnectFromServer(){
         socket.close()
         serverWriter!!.close()
         serverReader!!.close()
@@ -29,15 +28,19 @@ class Client (host: String, port: Int, console: Printable) {
 
     fun sendAndReceiveResponse(request: Request): Response {
         while(true){
-            if (Objects.isNull(serverReader) || Objects.isNull(serverWriter)){
+            try {
+                if (Objects.isNull(serverReader) || Objects.isNull(serverWriter)) {
+                    connectToServer()
+                } else {
+                    if (request.isEmpty()) return Response(ResponseStatus.WRONG_ARGUMENTS, "Запрос пустой :(")
+                    serverWriter!!.writeObject(request)
+                    serverWriter!!.flush()
+                    val response = serverReader!!.readObject() as Response
+                    disconnectFromServer()
+                    return response;
+                }
+            } catch (e: IOException){
                 connectToServer()
-            } else {
-                if (request.isEmpty()) return Response(ResponseStatus.WRONG_ARGUMENTS, "Запрос пустой :(")
-                serverWriter!!.writeObject(request)
-                serverWriter!!.flush()
-                val response = serverReader!!.readObject() as Response
-//                disconnectFromServer()
-                return response;
             }
         }
     }
