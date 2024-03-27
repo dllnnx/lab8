@@ -1,4 +1,4 @@
-package labs.server.commands
+package labs.commands
 
 import java.util.*
 
@@ -6,11 +6,11 @@ import java.util.*
  * Абстрактный класс для всех команд
  * @author dllnnx
  */
-abstract class Command (var name: String, private var description: String): labs.server.commands.CommandInterface {
+abstract class Command (var name: String, private var description: String): CommandInterface {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || javaClass != other.javaClass) return false
-        val command = other as labs.server.commands.Command
+        val command = other as Command
         return name == command.name && description == command.description
     }
 

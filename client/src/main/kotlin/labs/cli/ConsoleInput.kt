@@ -1,6 +1,6 @@
-package labs.client.cli
+package labs.cli
 
-import labs.client.utility.ScannerManager
+import labs.utility.ScannerManager
 import java.util.*
 
 /**

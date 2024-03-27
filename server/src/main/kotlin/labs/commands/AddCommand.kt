@@ -1,9 +1,9 @@
-package labs.server.commands
+package labs.commands
 
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
-import labs.server.utility.CollectionManager
+import labs.utility.CollectionManager
 import java.util.Objects
 
 /**
@@ -11,7 +11,7 @@ import java.util.Objects
  * @author dllnnx
  */
 class AddCommand(private val collectionManager: CollectionManager) :
-    labs.server.commands.Command("add", " {element}: добавить новый элемент в коллекцию.") {
+    Command("add", " {element}: добавить новый элемент в коллекцию.") {
 
     override fun execute(request: Request) : Response {
         if (request.args.isNotBlank()) return Response(

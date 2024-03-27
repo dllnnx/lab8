@@ -1,17 +1,16 @@
-package labs.server.commands
+package labs.commands
 
-import shared.utility.Console
-import server.utility.CollectionManager
-import shared.dto.Request
-import shared.dto.Response
-import shared.dto.ResponseStatus
+import labs.dto.Request
+import labs.dto.Response
+import labs.dto.ResponseStatus
+import labs.utility.CollectionManager
 
 /**
  * Команда info. Выводит в стандартный поток вывода информацию о коллекции.
  * @author dllnnx
  */
-class InfoCommand(private val console: Console, private val collectionManager: CollectionManager) :
-    labs.server.commands.Command("info", ": вывести в стандартный поток вывода информацию о коллекции.") {
+class InfoCommand(private val collectionManager: CollectionManager) :
+    Command("info", ": вывести в стандартный поток вывода информацию о коллекции.") {
     /**
      * Выполнить команду
      */

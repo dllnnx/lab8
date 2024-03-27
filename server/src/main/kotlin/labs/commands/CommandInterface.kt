@@ -1,4 +1,4 @@
-package labs.server.commands
+package labs.commands
 
 import labs.dto.Request
 import labs.dto.Response

@@ -1,4 +1,4 @@
-package labs.client.utility
+package labs.utility
 
 import java.util.*
 

@@ -1,11 +1,8 @@
-package labs.server.utility
+package labs.utility
 
-import server.exceptions.OpeningServerException
-import shared.dto.Request
-import shared.dto.Response
-import shared.utility.FileConsole
-import shared.utility.Printable
-import shared.utility.RequestHandler
+import labs.dto.Request
+import labs.dto.Response
+import labs.exceptions.OpeningServerException
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.IOException
@@ -24,7 +21,7 @@ class Server (private val port: Int, private val handler: RequestHandler, privat
     private val bf = BufferedInputStream(System.`in`)
     private val bfReader = BufferedReader(InputStreamReader(bf))
 
-    fun openServerSocket(){
+    private fun openServerSocket(){
         try {
             val socketAddress: SocketAddress = InetSocketAddress(port)
             serverSocketChannel = ServerSocketChannel.open()
@@ -35,13 +32,13 @@ class Server (private val port: Int, private val handler: RequestHandler, privat
         }
     }
 
-    fun connectToClient() : SocketChannel{
+    private fun connectToClient() : SocketChannel{
         socketChannel = serverSocketChannel.socket().accept().channel
         console.println("Соединение с клиентом успешно установлено!")
         return socketChannel!!
     }
 
-    fun processClientRequest(clientSocket : SocketChannel) : Boolean {
+    private fun processClientRequest(clientSocket : SocketChannel) : Boolean {
         var userRequest : Request? = null
         var responseToUser : Response
 

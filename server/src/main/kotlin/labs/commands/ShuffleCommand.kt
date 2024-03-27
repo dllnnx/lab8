@@ -1,21 +1,17 @@
-package labs.server.commands
+package labs.commands
 
-import shared.utility.Console
-import shared.utility.ConsoleColor
-import server.utility.CollectionManager
-import shared.dto.Request
-import shared.dto.Response
-import shared.dto.ResponseStatus
+import labs.dto.Request
+import labs.dto.Response
+import labs.dto.ResponseStatus
+import labs.utility.CollectionManager
 
 /**
  * Команда shuffle. Перемешивает элементы коллекции в случайном порядке.
  * @author dllnnx
  */
-class ShuffleCommand(private val console: Console, private val collectionManager: CollectionManager) :
-    labs.server.commands.Command("shuffle", ": перемешать элементы коллекции в случайном порядке.") {
-    /**
-     * Выполнить команду
-     */
+class ShuffleCommand(private val collectionManager: CollectionManager) :
+    Command("shuffle", ": перемешать элементы коллекции в случайном порядке.") {
+
     override fun execute(request: Request) : Response {
         if (request.args.isNotEmpty()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды не требуются аргументы!")

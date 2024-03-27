@@ -1,4 +1,4 @@
-package labs.shared.dto
+package labs.dto
 
 enum class ResponseStatus {
     OK,

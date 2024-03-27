@@ -1,23 +1,18 @@
-package labs.server.commands
+package labs.commands
 
-import labs.server.utility.CommandManager
-import labs.utility.Console
-import shared.utility.Console
-import server.utility.CommandManager
-import shared.dto.Request
-import shared.dto.Response
-import shared.dto.ResponseStatus
+import labs.dto.Request
+import labs.dto.Response
+import labs.dto.ResponseStatus
+import labs.utility.CommandManager
 import kotlin.math.max
 
 /**
  * Команда history. Выводит последние 10 команд (без их аргументов).
  * @author dllnnx
  */
-class HistoryCommand(private val console: Console, private val commandManager: CommandManager) :
-    labs.server.commands.Command("history", ":  вывести последние 10 команд (без их аргументов).") {
-    /**
-     * Выполнить команду
-     */
+class HistoryCommand(private val commandManager: CommandManager) :
+    Command("history", ":  вывести последние 10 команд (без их аргументов).") {
+
     override fun execute(request: Request) : Response {
         if (request.args.isNotEmpty()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды не требуются аргументы!")

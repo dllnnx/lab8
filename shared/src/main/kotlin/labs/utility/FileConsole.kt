@@ -1,4 +1,4 @@
-package labs.shared.utility
+package labs.utility
 
 /**
  * Класс консоли для работы со скриптами.

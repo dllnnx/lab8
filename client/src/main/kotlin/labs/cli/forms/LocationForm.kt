@@ -1,7 +1,7 @@
-package labs.client.cli.forms
+package labs.cli.forms
 
-import shared.utility.Printable
-import shared.objects.Location
+import labs.objects.Location
+import labs.utility.Printable
 import java.util.*
 
 class LocationForm(console: Printable?) : Form<Location?>(console) {

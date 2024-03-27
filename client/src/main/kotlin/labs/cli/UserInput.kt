@@ -1,4 +1,4 @@
-package labs.client.cli
+package labs.cli
 
 /**
  * Интерфейс для классов ввода.

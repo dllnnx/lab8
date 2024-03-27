@@ -1,17 +1,16 @@
-package labs.server.commands
+package labs.commands
 
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
-import labs.server.utility.CollectionManager
-import labs.utility.Console
+import labs.utility.CollectionManager
 
 /**
  * Команда filter_contains_name. Выводит элементы, значение поля name которых содержит заданную подстроку.
  * @author dllnnx
  */
-class FilterContainsNameCommand(private val console: Console, private val collectionManager: CollectionManager) :
-    labs.server.commands.Command(
+class FilterContainsNameCommand(private val collectionManager: CollectionManager) :
+    Command(
         "filter_contains_name",
         " name: вывести элементы, значение поля name которых содержит заданную подстроку.") {
 

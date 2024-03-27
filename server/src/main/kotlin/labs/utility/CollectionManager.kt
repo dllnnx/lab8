@@ -1,6 +1,6 @@
-package labs.server.utility
+package labs.utility
 
-import shared.objects.Person
+import labs.objects.Person
 import java.util.*
 
 /**
@@ -35,6 +35,7 @@ class CollectionManager {
      * @param person Элемент для добавления.
      */
     fun addElement(person: Person?) {
+        person?.id = getFreeId();
         collection.add(person)
     }
 

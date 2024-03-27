@@ -1,6 +1,6 @@
-package labs.shared.dto
+package labs.dto
 
-import labs.shared.objects.Person
+import labs.objects.Person
 import java.io.Serializable
 
 class Request (val commandName: String) : Serializable {
@@ -11,7 +11,8 @@ class Request (val commandName: String) : Serializable {
         this.args = args
     }
 
-    constructor(commandName: String, person: Person): this(commandName){
+    constructor(commandName: String, args: String, person: Person): this(commandName, ){
+        this.args = args
         this.person = person
     }
 

@@ -1,5 +1,6 @@
-package labs.shared.objects
+package labs.objects
 
+import java.io.Serializable
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -9,7 +10,6 @@ import java.time.format.DateTimeFormatter
  */
 
 class Person (
-    var id: Long,
     var name: String,
     var coordinates: Coordinates,
     private var creationDate: ZonedDateTime,
@@ -18,8 +18,9 @@ class Person (
     private var hairColor: HairColor,
     var nationality: Country,
     var location: Location
-) : Comparable<Person?>{
+) : Comparable<Person?>, Serializable {
 
+    var id : Long = 0
     override fun compareTo(other: Person?): Int {
         return name.compareTo(other?.name!!)
     }

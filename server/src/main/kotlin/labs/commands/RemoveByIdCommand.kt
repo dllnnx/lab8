@@ -1,23 +1,22 @@
-package labs.server.commands
+package labs.commands
 
-import shared.utility.Console
-import shared.utility.ConsoleColor
-import server.utility.CollectionManager
-import shared.dto.Request
-import shared.dto.Response
-import shared.dto.ResponseStatus
+import labs.dto.Request
+import labs.dto.Response
+import labs.dto.ResponseStatus
+import labs.utility.CollectionManager
 
 /**
  * Команда remove_by_id. Удаляет элемент из коллекции по его id.
  * @author dllnnx
  */
-class RemoveByIdCommand(private val console: Console, private val collectionManager: CollectionManager) :
-    labs.server.commands.Command("remove_by_id", " id: удалить элемент из коллекции по его id.") {
+class RemoveByIdCommand(private val collectionManager: CollectionManager) :
+    Command("remove_by_id", " id: удалить элемент из коллекции по его id.") {
 
     override fun execute(request: Request) : Response {
         try {
             if (request.args.split(" ").size != 1) {
-                return Response(ResponseStatus.WRONG_ARGUMENTS, "Неверное количество аргументов! " +
+                return Response(
+                    ResponseStatus.WRONG_ARGUMENTS, "Неверное количество аргументов! " +
                         "Введено: " + request.args.split(" ").size + ", ожидалось: 1.")
             }
 

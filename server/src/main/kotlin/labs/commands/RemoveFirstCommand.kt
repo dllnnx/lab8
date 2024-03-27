@@ -1,21 +1,17 @@
-package labs.server.commands
+package labs.commands
 
-import shared.utility.Console
-import shared.utility.ConsoleColor
-import server.utility.CollectionManager
-import shared.dto.Request
-import shared.dto.Response
-import shared.dto.ResponseStatus
+import labs.dto.Request
+import labs.dto.Response
+import labs.dto.ResponseStatus
+import labs.utility.CollectionManager
 
 /**
  * Команда remove_first. Удаляет первый элемент из коллекции.
  * @author dllnnx
  */
-class RemoveFirstCommand(private val console: Console, private val collectionManager: CollectionManager) :
-    labs.server.commands.Command("remove_first", ": удалить первый элемент из коллекции.") {
-    /**
-     * Выполнить команду
-     */
+class RemoveFirstCommand(private val collectionManager: CollectionManager) :
+    Command("remove_first", ": удалить первый элемент из коллекции.") {
+
     override fun execute(request: Request) : Response {
         if (request.args.isBlank()) {
             if (collectionManager.getCollectionSize() != 0) {

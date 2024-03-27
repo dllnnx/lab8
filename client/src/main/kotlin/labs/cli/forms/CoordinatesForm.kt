@@ -1,7 +1,7 @@
-package labs.client.cli.forms
+package labs.cli.forms
 
-import shared.utility.Printable
-import shared.objects.Coordinates
+import labs.objects.Coordinates
+import labs.utility.Printable
 
 /**
  * Класс для формирования объекта класса [Coordinates].

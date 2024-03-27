@@ -1,17 +1,16 @@
-package labs.server.commands
+package labs.commands
 
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
-import labs.server.utility.CollectionManager
-import labs.utility.Console
+import labs.utility.CollectionManager
 
 /**
  * Команда filter_by_height. Выводит элементы, значение поля height которых равно заданному.
  * @author dllnnx
  */
-class FilterByHeightCommand(private val console: Console, private val collectionManager: CollectionManager) :
-    labs.server.commands.Command("filter_by_height", " height: вывести элементы, значение поля height которых равно заданному.") {
+class FilterByHeightCommand(private val collectionManager: CollectionManager) :
+    Command("filter_by_height", " height: вывести элементы, значение поля height которых равно заданному.") {
 
     override fun execute(request: Request) : Response {
         try {

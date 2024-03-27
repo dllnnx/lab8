@@ -1,16 +1,15 @@
-package labs.server.commands
+package labs.commands
 
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
-import labs.server.utility.CollectionManager
-import labs.utility.Console
+import labs.utility.CollectionManager
 
 /**
  * Команда clear. Очищает коллекцию
  * @author dllnnx
  */
-class ClearCommand(private val console: Console, private val collectionManager: CollectionManager) :
+class ClearCommand(private val collectionManager: CollectionManager) :
     Command("clear", ": очистить коллекцию.") {
 
     override fun execute(request: Request) : Response {

@@ -1,18 +1,17 @@
-package labs.server.commands
+package labs.commands
 
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
-import labs.server.utility.CollectionManager
-import labs.utility.Console
+import labs.utility.CollectionManager
 import java.util.Objects
 
 /**
  * Команда update. Обновляет значение элемента коллекции, id которого равен заданному.
  * @author dllnnx
  */
-class UpdateCommand(private val console: Console, private val collectionManager: CollectionManager) :
-    labs.server.commands.Command("update", " id: обновить значение элемента коллекции, id которого равен заданному.") {
+class UpdateCommand(private val collectionManager: CollectionManager) :
+    Command("update", " id: обновить значение элемента коллекции, id которого равен заданному.") {
 
     override fun execute(request: Request) : Response {
         try {

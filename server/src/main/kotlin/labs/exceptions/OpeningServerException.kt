@@ -1,4 +1,4 @@
-package labs.server.exceptions
+package labs.exceptions
 
 class OpeningServerException : Exception() {
 }

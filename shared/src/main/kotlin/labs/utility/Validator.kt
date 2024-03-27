@@ -1,14 +1,14 @@
-package labs.cli.forms
+package labs.utility
 
-import shared.objects.Coordinates
-import shared.objects.Location
-import shared.objects.Person
+import labs.objects.Coordinates
+import labs.objects.Location
+import labs.objects.Person
 
 /**
  * Валидатор объектов класса Person.
  * @author dllnnx
  */
-class Validator {
+class Validator{
     /**
      * Проверяет экземпляр класса Coordinates на валидность
      * @param coordinates Проверяемый экземпляр

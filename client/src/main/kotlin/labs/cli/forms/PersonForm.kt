@@ -1,10 +1,9 @@
-package labs.client.cli.forms
+package labs.cli.forms
 
-import shared.utility.Console
-import shared.utility.FileConsole
-import shared.utility.Printable
-import server.utility.CollectionManager
-import shared.objects.*
+import labs.objects.*
+import labs.utility.Console
+import labs.utility.FileConsole
+import labs.utility.Printable
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -12,12 +11,9 @@ import java.util.*
  * Класс для формирования объектов типа [Person].
  * @author dllnnx
  */
-class PersonForm (console: Printable?, var collectionManager: CollectionManager) : Form<Person?>(console) {
-    private val console: Printable
+class PersonForm (console: Printable?) : Form<Person?>(console) {
+    private val console: Printable = if (Console.fileMode) FileConsole() else console!!
 
-    init {
-        this.console = if (Console.fileMode) FileConsole() else console!!
-    }
 
     /**
      * Собирает новый объект класса [Person]
@@ -25,29 +21,9 @@ class PersonForm (console: Printable?, var collectionManager: CollectionManager)
      */
     override fun build(): Person {
         return Person(
-            collectionManager.getFreeId(),
             askString(
                 "имя", "", { s: String? -> !s.isNullOrBlank() },
                 " Имя не может быть пустым"
-            ),
-            askCoordinates(),
-            ZonedDateTime.now(),
-            askInteger("рост", ". Значение поля должно быть больше 0",
-                { s: Int? -> s != null && s > 0 }, " Минимальное значение поля: 1."
-            ),
-            askEyeColor(),
-            askHairColor(),
-            askCountry(),
-            askLocation()
-        )
-    }
-
-    fun build(id: Long): Person {
-        return Person(
-            id,
-            askString(
-                "имя", "", { s: String? -> !s.isNullOrBlank() },
-                " Имя не может быть пустым(("
             ),
             askCoordinates(),
             ZonedDateTime.now(),

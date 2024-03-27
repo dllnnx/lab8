@@ -1,6 +1,6 @@
 package labs.utility
 
-import client.cli.UserInput
+import labs.cli.UserInput
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.*

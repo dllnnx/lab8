@@ -1,9 +1,8 @@
-package labs.client.utility
+package labs.utility
 
-import shared.utility.Printable
-import shared.dto.Request
-import shared.dto.Response
-import shared.dto.ResponseStatus
+import labs.dto.Request
+import labs.dto.Response
+import labs.dto.ResponseStatus
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.Socket
@@ -13,8 +12,8 @@ class Client (host: String, port: Int, console: Printable) {
     val host = host
     val port = port
     lateinit var socket: Socket
-    lateinit var serverWriter: ObjectOutputStream
-    lateinit var serverReader: ObjectInputStream
+    var serverWriter: ObjectOutputStream? = null
+    var serverReader: ObjectInputStream? = null
 
     fun connectToServer(){
         socket = Socket(host, port)
@@ -24,8 +23,8 @@ class Client (host: String, port: Int, console: Printable) {
 
     fun disconnectFromServer(){
         socket.close()
-        serverWriter.close()
-        serverReader.close()
+        serverWriter!!.close()
+        serverReader!!.close()
     }
 
     fun sendAndReceiveResponse(request: Request): Response {
@@ -34,10 +33,10 @@ class Client (host: String, port: Int, console: Printable) {
                 connectToServer()
             } else {
                 if (request.isEmpty()) return Response(ResponseStatus.WRONG_ARGUMENTS, "Запрос пустой :(")
-                serverWriter.writeObject(request)
-                serverWriter.flush()
-                val response = serverReader.readObject() as Response
-                disconnectFromServer()
+                serverWriter!!.writeObject(request)
+                serverWriter!!.flush()
+                val response = serverReader!!.readObject() as Response
+//                disconnectFromServer()
                 return response;
             }
         }

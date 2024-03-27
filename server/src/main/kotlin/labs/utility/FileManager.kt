@@ -1,10 +1,7 @@
-package labs.server.utility
+package labs.utility
 
 import com.google.gson.stream.JsonWriter
-import shared.utility.Console
-import shared.utility.ConsoleColor
-import client.cli.forms.Validator
-import shared.objects.Person
+import labs.objects.Person
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream

@@ -1,11 +1,11 @@
-package labs.client.cli.forms
+package labs.cli.forms
 
-import client.cli.UserInput
-import server.utility.ScriptManager
-import shared.utility.Console
-import labs.client.cli.ConsoleInput
-import shared.utility.FileConsole
-import shared.utility.Printable
+import labs.cli.ConsoleInput
+import labs.cli.UserInput
+import labs.utility.Console
+import labs.utility.FileConsole
+import labs.utility.Printable
+import labs.utility.ScriptManager
 import java.util.*
 import java.util.function.Predicate
 
@@ -15,13 +15,8 @@ import java.util.function.Predicate
  * @author dllnnx
 </T> */
 abstract class Form<T>(console: Printable?) {
-    private val console: Printable
-    private val scanner: UserInput
-
-    init {
-        this.console = if (Console.fileMode) FileConsole() else console!!
-        scanner = if (Console.fileMode) ScriptManager() else ConsoleInput()
-    }
+    private val console: Printable = if (Console.fileMode) FileConsole() else console!!
+    private val scanner: UserInput = if (Console.fileMode) ScriptManager() else ConsoleInput()
 
     /**
      * Формирует объекта класса

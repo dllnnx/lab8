@@ -1,10 +1,12 @@
-package labs.shared.objects
+package labs.objects
+
+import java.io.Serializable
 
 /**
  * Перечисление цветов волос человека.
  * @author dllnnx
  */
-enum class HairColor {
+enum class HairColor : Serializable{
     GREEN,
     BLACK,
     ORANGE,

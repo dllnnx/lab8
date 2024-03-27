@@ -1,12 +1,12 @@
-package labs.shared.dto
+package labs.dto
 
-import labs.shared.objects.Person
+import labs.objects.Person
 import java.io.Serializable
 import java.util.*
 
-class Response (status: ResponseStatus): Serializable {
+class Response (var status: ResponseStatus): Serializable {
     var message = ""
-    lateinit var collection: LinkedList<Person?>
+    var collection: LinkedList<Person?>? = null
 
     constructor(status: ResponseStatus, message: String) : this(status) {
         this.message = message
