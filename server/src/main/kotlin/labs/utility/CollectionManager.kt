@@ -1,7 +1,8 @@
 package labs.utility
 
 import labs.objects.Person
-import java.util.*
+import java.util.Date
+import java.util.LinkedList
 
 /**
  * Менеджер коллекции.
@@ -18,7 +19,7 @@ class CollectionManager {
      * Возвращает имя типа коллекции
      * @return Имя типа коллекции
      */
-    fun getCollectionType(): String{
+    fun getCollectionType(): String {
         return collection.javaClass.name
     }
 
@@ -26,7 +27,7 @@ class CollectionManager {
      * Возвращает размер коллекции
      * @return Размер коллекции
      */
-    fun getCollectionSize(): Int{
+    fun getCollectionSize(): Int {
         return collection.size
     }
 
@@ -35,7 +36,7 @@ class CollectionManager {
      * @param person Элемент для добавления.
      */
     fun addElement(person: Person?) {
-        person?.id = getFreeId();
+        person?.id = getFreeId()
         collection.add(person)
     }
 
@@ -45,18 +46,20 @@ class CollectionManager {
      * @return Элемент по заданному значению id или null, если не найдено
      */
     fun getById(id: Long): Person? {
-        return collection.filter { it!!.id == id }.getOrElse(0) {null}
+        return collection.filter { it!!.id == id }.getOrElse(0) { null }
     }
 
     /**
      * Удаляет элемент коллекции по заданному значению id
      * @param id id элемента
      */
-    fun removeById(id: Long) : Boolean {
+    fun removeById(id: Long): Boolean {
         if (getById(id) != null) {
             collection.remove(getById(id))
             return true
-        } else return false
+        } else {
+            return false
+        }
     }
 
     /**
@@ -89,7 +92,7 @@ class CollectionManager {
      * @return List из найденных элементов
      */
     fun filterContainsName(name: String?): LinkedList<Person?> {
-        return collection.filter { it?.name?.contains(name.toString()) == true}.toCollection(LinkedList<Person?>())
+        return collection.filter { it?.name?.contains(name.toString()) == true }.toCollection(LinkedList<Person?>())
     }
 
     /**
@@ -109,11 +112,10 @@ class CollectionManager {
 
     fun getFreeId(): Long {
         if (collection.isEmpty()) return 0
-        val ids = collection.map{it!!.id}.toMutableList()
-        for (i in 0..collection.maxOf { it!!.id }){
+        val ids = collection.map { it!!.id }.toMutableList()
+        for (i in 0..collection.maxOf { it!!.id }) {
             if (!ids.contains(i)) return i
         }
         return collection.maxOf { it!!.id } + 1
     }
-
 }

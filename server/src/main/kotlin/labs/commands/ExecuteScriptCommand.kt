@@ -1,24 +1,24 @@
-//package labs.commands
+// package labs.commands
 //
-//import labs.dto.Request
-//import labs.dto.Response
-//import labs.dto.ResponseStatus
-//import labs.utility.CommandManager
-//import labs.utility.ScriptManager
-//import labs.utility.Console
-//import labs.utility.ConsoleColor
-//import java.io.File
-//import java.io.FileNotFoundException
+// import labs.dto.Request
+// import labs.dto.Response
+// import labs.dto.ResponseStatus
+// import labs.utility.CommandManager
+// import labs.utility.ScriptManager
+// import labs.utility.Console
+// import labs.utility.ConsoleColor
+// import java.io.File
+// import java.io.FileNotFoundException
 //
-///**
+// /**
 // * Команда execute_script. Считывает и исполняет скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.
 // * @author dllnnx
 // */
-//class ExecuteScriptCommand(
+// class ExecuteScriptCommand(
 //    private val console: Console,
 //    private val commandManager: CommandManager,
 //    private val scriptManager: ScriptManager
-//) :
+// ) :
 //    Command("execute_script",
 //        " file_name: считать и исполнить скрипт из указанного файла. В скрипте содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме."
 //    ) {
@@ -68,4 +68,4 @@
 //        }
 //        Console.fileMode = false
 //    }
-//}
+// }

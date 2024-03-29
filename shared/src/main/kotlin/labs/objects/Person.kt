@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter
  * @author dllnnx
  */
 
-class Person (
+class Person(
     var name: String,
     var coordinates: Coordinates,
     private var creationDate: ZonedDateTime,
@@ -17,10 +17,10 @@ class Person (
     private var eyeColor: EyeColor,
     private var hairColor: HairColor,
     var nationality: Country,
-    var location: Location
+    var location: Location,
 ) : Comparable<Person?>, Serializable {
+    var id: Long = 0
 
-    var id : Long = 0
     override fun compareTo(other: Person?): Int {
         return name.compareTo(other?.name!!)
     }
@@ -40,5 +40,4 @@ class Person (
             }
             """.trimIndent()
     }
-
 }

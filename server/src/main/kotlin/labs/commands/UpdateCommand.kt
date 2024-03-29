@@ -12,20 +12,22 @@ import java.util.Objects
  */
 class UpdateCommand(private val collectionManager: CollectionManager) :
     Command("update", " id: обновить значение элемента коллекции, id которого равен заданному.") {
-
-    override fun execute(request: Request) : Response {
+    override fun execute(request: Request): Response {
         try {
             if (request.args.trim().split(" ").size != 1) {
                 return Response(
-                    ResponseStatus.WRONG_ARGUMENTS, "Неверное количество аргументов! " +
-                        "Введено: " + request.args.trim().split(" ").size + ", ожидалось: 1.")
+                    ResponseStatus.WRONG_ARGUMENTS,
+                    "Неверное количество аргументов! " +
+                        "Введено: " + request.args.trim().split(" ").size + ", ожидалось: 1.",
+                )
             }
             if (collectionManager.getCollectionSize() == 0) {
                 return Response(ResponseStatus.WARNING, "Коллекция пуста!")
             }
 
-            if (Objects.isNull(request.person))
+            if (Objects.isNull(request.person)) {
                 return Response(ResponseStatus.OBJECT_REQUIRED, "Для команды update требуется объект!")
+            }
 
             val id = request.args.trim().split(" ")[0].toLong()
             if (collectionManager.getById(id) != null) {

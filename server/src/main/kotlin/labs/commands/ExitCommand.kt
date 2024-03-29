@@ -9,8 +9,7 @@ import labs.dto.ResponseStatus
  * @author dllnnx
  */
 class ExitCommand() : Command("exit", ": завершить программу (без сохранения в файл).") {
-
-    override fun execute(request: Request) : Response {
+    override fun execute(request: Request): Response {
         if (request.args.isNotEmpty()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды не требуются аргументы!")
         }

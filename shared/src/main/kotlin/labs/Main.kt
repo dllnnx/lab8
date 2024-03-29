@@ -1,4 +1,0 @@
-package labs
-
-class Main {
-}

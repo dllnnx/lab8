@@ -3,21 +3,21 @@ package labs
 import labs.utility.Client
 import labs.utility.Console
 import labs.utility.RuntimeManager
-import java.util.*
+import java.util.Scanner
 
 object Main {
     val console = Console()
-    lateinit var host : String
-    var port : Int = 0
+    lateinit var host: String
+    var port: Int = 0
 
     @JvmStatic
-    fun main(args: Array<String>){
+    fun main(args: Array<String>) {
         if (!parseHostPort(args)) return
         val client = Client(host, port, console)
         RuntimeManager(console, Scanner(System.`in`), client).interactiveMode()
     }
 
-    private fun parseHostPort(args: Array<String>) : Boolean{
+    private fun parseHostPort(args: Array<String>): Boolean {
         if (args.size != 2) {
             console.printError("Передайте хост и порт в аргументы командной строки в формате <host> <port>")
             return false

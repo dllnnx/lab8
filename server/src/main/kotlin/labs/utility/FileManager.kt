@@ -13,22 +13,28 @@ import java.util.*
  * Менеджер для работы с файлами.
  * @author dllnnx
  */
-class FileManager (private var console: Console, private var collectionManager: CollectionManager){
-    private val gson: com.google.gson.Gson = com.google.gson.GsonBuilder()
-        .setPrettyPrinting()
-        .registerTypeAdapter(ZonedDateTime::class.java, object : com.google.gson.TypeAdapter<ZonedDateTime?>() {
-            @Throws(IOException::class)
-            override fun write(out: JsonWriter?, value: ZonedDateTime?) {
-                out?.value(value.toString())
-            }
+class FileManager(private var console: Console, private var collectionManager: CollectionManager) {
+    private val gson: com.google.gson.Gson =
+        com.google.gson.GsonBuilder()
+            .setPrettyPrinting()
+            .registerTypeAdapter(
+                ZonedDateTime::class.java,
+                object : com.google.gson.TypeAdapter<ZonedDateTime?>() {
+                    @Throws(IOException::class)
+                    override fun write(
+                        out: JsonWriter?,
+                        value: ZonedDateTime?,
+                    ) {
+                        out?.value(value.toString())
+                    }
 
-            @Throws(IOException::class)
-            override fun read(`in`: com.google.gson.stream.JsonReader): ZonedDateTime {
-                return ZonedDateTime.parse(`in`.nextString())
-            }
-        })
-        .create()
-
+                    @Throws(IOException::class)
+                    override fun read(`in`: com.google.gson.stream.JsonReader): ZonedDateTime {
+                        return ZonedDateTime.parse(`in`.nextString())
+                    }
+                },
+            )
+            .create()
 
     /**
      * Сохраняет коллекцию в json файл.
@@ -44,8 +50,11 @@ class FileManager (private var console: Console, private var collectionManager: 
             out.write(gson.toJson(collectionManager.collection).toByteArray())
             out.close()
             console.println(
-                ConsoleColor.setConsoleColor("Ура, сохранение данных произошло успешно!!",
-                ConsoleColor.GREEN))
+                ConsoleColor.setConsoleColor(
+                    "Ура, сохранение данных произошло успешно!!",
+                    ConsoleColor.GREEN,
+                ),
+            )
         } catch (e: FileNotFoundException) {
             console.printError("Такого файла не существует(((")
         } catch (e: IOException) {
@@ -67,10 +76,11 @@ class FileManager (private var console: Console, private var collectionManager: 
             while (scanner.hasNext()) {
                 jsonText.append(scanner.nextLine())
             }
-            val people: Array<Person> = gson.fromJson(
-                jsonText.toString(),
-                Array<Person>::class.java
-            )
+            val people: Array<Person> =
+                gson.fromJson(
+                    jsonText.toString(),
+                    Array<Person>::class.java,
+                )
             val validator = Validator()
 
             for (person in people) {
@@ -84,7 +94,7 @@ class FileManager (private var console: Console, private var collectionManager: 
             console.printError("Такого файла не существует :(")
         } catch (e: IllegalArgumentException) {
             console.printError("Данные в файле невалидны! Коллекция не заполнена :((")
-        } catch (e: NullPointerException){
+        } catch (e: NullPointerException) {
             console.printError("Данные в файле невалидны! Коллекция не заполнена :((")
         }
     }

@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm") version "1.9.0"
     kotlin("plugin.serialization") version "1.9.0"
+    id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
     application
 }
 
@@ -29,8 +30,9 @@ tasks.register<Jar>("fatJar") {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest { attributes(mapOf("Main-Class" to application.mainClass)) } // Provided we set it up in the application plugin configuration
     val sourcesMain = sourceSets.main.get()
-    val contents = configurations.runtimeClasspath.get()
-        .map { if (it.isDirectory) it else zipTree(it) } +
+    val contents =
+        configurations.runtimeClasspath.get()
+            .map { if (it.isDirectory) it else zipTree(it) } +
             sourcesMain.output
     from(contents)
 }

@@ -11,9 +11,8 @@ import java.util.*
  * Класс для формирования объектов типа [Person].
  * @author dllnnx
  */
-class PersonForm (console: Printable?) : Form<Person?>(console) {
+class PersonForm(console: Printable?) : Form<Person?>(console) {
     private val console: Printable = if (Console.fileMode) FileConsole() else console!!
-
 
     /**
      * Собирает новый объект класса [Person]
@@ -22,18 +21,23 @@ class PersonForm (console: Printable?) : Form<Person?>(console) {
     override fun build(): Person {
         return Person(
             askString(
-                "имя", "", { s: String? -> !s.isNullOrBlank() },
-                " Имя не может быть пустым"
+                "имя",
+                "",
+                { s: String? -> !s.isNullOrBlank() },
+                " Имя не может быть пустым",
             ),
             askCoordinates(),
             ZonedDateTime.now(),
-            askInteger("рост", ". Значение поля должно быть больше 0",
-                { s: Int? -> s != null && s > 0 }, " Минимальное значение поля: 1."
+            askInteger(
+                "рост",
+                ". Значение поля должно быть больше 0",
+                { s: Int? -> s != null && s > 0 },
+                " Минимальное значение поля: 1.",
             ),
             askEyeColor(),
             askHairColor(),
             askCountry(),
-            askLocation()
+            askLocation(),
         )
     }
 
@@ -43,19 +47,22 @@ class PersonForm (console: Printable?) : Form<Person?>(console) {
 
     private fun askEyeColor(): EyeColor {
         return askEnum(
-            EyeColor.entries.toTypedArray(), "цвета глаз"
+            EyeColor.entries.toTypedArray(),
+            "цвета глаз",
         ) { obj: String? -> Objects.nonNull(obj) } as EyeColor
     }
 
     private fun askHairColor(): HairColor {
         return askEnum(
-            HairColor.entries.toTypedArray(), "цвета волос"
+            HairColor.entries.toTypedArray(),
+            "цвета волос",
         ) { obj: String? -> Objects.nonNull(obj) } as HairColor
     }
 
     private fun askCountry(): Country {
         return askEnum(
-            Country.entries.toTypedArray(), "страны происхождения"
+            Country.entries.toTypedArray(),
+            "страны происхождения",
         ) { obj: String? -> Objects.nonNull(obj) } as Country
     }
 

@@ -5,7 +5,6 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.util.*
 
-
 class ScriptManager : UserInput {
     /**
      * Считывает следующую строку ввода
@@ -65,6 +64,5 @@ class ScriptManager : UserInput {
                 ""
             }
         }
-
     }
 }

@@ -32,7 +32,12 @@ abstract class Form<T>(console: Printable?) {
      * @param errMessage Сообщение об ошибке
      * @return Сформированная строка
      */
-    fun askString(type: String, extraInf: String, validator: Predicate<String?>, errMessage: String): String {
+    fun askString(
+        type: String,
+        extraInf: String,
+        validator: Predicate<String?>,
+        errMessage: String,
+    ): String {
         while (true) {
             try {
                 console.println("Введите $type$extraInf: ")
@@ -52,7 +57,11 @@ abstract class Form<T>(console: Printable?) {
      * @param validator Валидатор для формируемого объекта
      * @return Сформированный объект Enum
      */
-    fun askEnum(values: Array<Enum<*>>, enumName: String, validator: Predicate<String?>): Enum<*> {
+    fun askEnum(
+        values: Array<Enum<*>>,
+        enumName: String,
+        validator: Predicate<String?>,
+    ): Enum<*> {
         while (true) {
             console.println("Возможные $enumName: ")
             for (value in values) {
@@ -82,7 +91,12 @@ abstract class Form<T>(console: Printable?) {
      * @param errMessage Сообщение об ошибке
      * @return Сформированное число
      */
-    fun askInteger(type: String, extraInf: String, validator: Predicate<Int?>, errMessage: String): Int {
+    fun askInteger(
+        type: String,
+        extraInf: String,
+        validator: Predicate<Int?>,
+        errMessage: String,
+    ): Int {
         while (true) {
             console.println("Введите $type$extraInf: ")
             val input = scanner.nextLine()!!.trim { it <= ' ' }
@@ -104,7 +118,12 @@ abstract class Form<T>(console: Printable?) {
      * @param errMessage Сообщение об ошибке
      * @return Сформированное число
      */
-    fun askFloat(type: String, extraInf: String, validator: Predicate<Float?>, errMessage: String): Float {
+    fun askFloat(
+        type: String,
+        extraInf: String,
+        validator: Predicate<Float?>,
+        errMessage: String,
+    ): Float {
         while (true) {
             console.println("Введите $type$extraInf: ")
             val input = scanner.nextLine()!!.trim { it <= ' ' }
@@ -126,7 +145,12 @@ abstract class Form<T>(console: Printable?) {
      * @param errMessage Сообщение об ошибке
      * @return Сформированное число
      */
-    fun askDouble(type: String, extraInf: String, validator: Predicate<Double?>, errMessage: String): Double {
+    fun askDouble(
+        type: String,
+        extraInf: String,
+        validator: Predicate<Double?>,
+        errMessage: String,
+    ): Double {
         while (true) {
             console.println("Введите $type$extraInf: ")
             val input = scanner.nextLine()!!.trim { it <= ' ' }

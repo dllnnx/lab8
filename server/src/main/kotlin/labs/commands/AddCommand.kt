@@ -12,12 +12,14 @@ import java.util.Objects
  */
 class AddCommand(private val collectionManager: CollectionManager) :
     Command("add", " {element}: добавить новый элемент в коллекцию.") {
-
-    override fun execute(request: Request) : Response {
-        if (request.args.isNotBlank()) return Response(
-            ResponseStatus.WRONG_ARGUMENTS,
-            "Для этой команды не требуются аргументы!")
-        if (Objects.isNull(request.person)){
+    override fun execute(request: Request): Response {
+        if (request.args.isNotBlank()) {
+            return Response(
+                ResponseStatus.WRONG_ARGUMENTS,
+                "Для этой команды не требуются аргументы!",
+            )
+        }
+        if (Objects.isNull(request.person)) {
             return Response(ResponseStatus.OBJECT_REQUIRED, "Для команды $name требуется объект!")
         } else {
             request.person?.id = collectionManager.getFreeId()

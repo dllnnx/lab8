@@ -7,5 +7,5 @@ enum class ResponseStatus {
     WRONG_ARGUMENTS,
     EXECUTE_SCRIPT,
     EXIT,
-    WARNING
+    WARNING,
 }

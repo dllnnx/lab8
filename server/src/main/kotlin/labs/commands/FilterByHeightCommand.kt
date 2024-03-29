@@ -11,13 +11,14 @@ import labs.utility.CollectionManager
  */
 class FilterByHeightCommand(private val collectionManager: CollectionManager) :
     Command("filter_by_height", " height: вывести элементы, значение поля height которых равно заданному.") {
-
-    override fun execute(request: Request) : Response {
+    override fun execute(request: Request): Response {
         try {
             if (request.args.split(" ").size != 1) {
                 return Response(
-                    ResponseStatus.WRONG_ARGUMENTS, "Неверное количество аргументов! " +
-                        "Ожидалось: 1, введено: " + request.args.split(" ").size + ".")
+                    ResponseStatus.WRONG_ARGUMENTS,
+                    "Неверное количество аргументов! " +
+                        "Ожидалось: 1, введено: " + request.args.split(" ").size + ".",
+                )
             }
             if (collectionManager.getCollectionSize() == 0) {
                 return Response(ResponseStatus.ERROR, "Коллекция пуста!")

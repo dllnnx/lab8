@@ -7,27 +7,29 @@ import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.Socket
-import java.util.*
+import java.util.Objects
 
-class Client (private val host: String, private val port: Int, console: Printable) {
+class Client(private val host: String, private val port: Int, console: Printable) {
     private lateinit var socket: Socket
     private var serverWriter: ObjectOutputStream? = null
     private var serverReader: ObjectInputStream? = null
 
-    private fun connectToServer(){
+    private fun connectToServer() {
         socket = Socket(host, port)
         serverWriter = ObjectOutputStream(socket.getOutputStream())
         serverReader = ObjectInputStream(socket.getInputStream())
     }
 
-    private fun disconnectFromServer(){
+    private fun disconnectFromServer() {
         socket.close()
         serverWriter!!.close()
         serverReader!!.close()
+        serverWriter = null
+        serverReader = null
     }
 
     fun sendAndReceiveResponse(request: Request): Response {
-        while(true){
+        while (true) {
             try {
                 if (Objects.isNull(serverReader) || Objects.isNull(serverWriter)) {
                     connectToServer()
@@ -37,9 +39,9 @@ class Client (private val host: String, private val port: Int, console: Printabl
                     serverWriter!!.flush()
                     val response = serverReader!!.readObject() as Response
                     disconnectFromServer()
-                    return response;
+                    return response
                 }
-            } catch (e: IOException){
+            } catch (e: IOException) {
                 connectToServer()
             }
         }

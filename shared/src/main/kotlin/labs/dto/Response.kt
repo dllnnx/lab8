@@ -4,7 +4,7 @@ import labs.objects.Person
 import java.io.Serializable
 import java.util.*
 
-class Response (var status: ResponseStatus): Serializable {
+class Response(var status: ResponseStatus) : Serializable {
     var message = ""
     var collection: LinkedList<Person?>? = null
 
@@ -12,8 +12,7 @@ class Response (var status: ResponseStatus): Serializable {
         this.message = message
     }
 
-    constructor(status: ResponseStatus, message: String, collection: LinkedList<Person?>) : this(status, message){
+    constructor(status: ResponseStatus, message: String, collection: LinkedList<Person?>) : this(status, message) {
         this.collection = collection
     }
-
 }

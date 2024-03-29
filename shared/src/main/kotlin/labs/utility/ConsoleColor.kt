@@ -13,7 +13,8 @@ enum class ConsoleColor(private val color: String) {
     BLUE("\u001B[34m"),
     PURPLE("\u001B[35m"),
     CYAN("\u001B[36m"),
-    GREY("\u001B[37m");
+    GREY("\u001B[37m"),
+    ;
 
     override fun toString(): String {
         return color
@@ -25,7 +26,10 @@ enum class ConsoleColor(private val color: String) {
          * @param msg Строка для вывода
          * @param color Присваиваемый цвет
          */
-        fun setConsoleColor(msg: String, color: ConsoleColor): String {
+        fun setConsoleColor(
+            msg: String,
+            color: ConsoleColor,
+        ): String {
             return color.toString() + msg + RESET
         }
     }

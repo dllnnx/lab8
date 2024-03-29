@@ -14,17 +14,17 @@ class InfoCommand(private val collectionManager: CollectionManager) :
     /**
      * Выполнить команду
      */
-    override fun execute(request: Request) : Response {
+    override fun execute(request: Request): Response {
         if (request.args.isNotEmpty()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды не требуются аргументы!")
         }
         val resp =
             """
-                Информация о коллекции: 
-                Тип коллекции: ${collectionManager.getCollectionType()}
-                Количество элементов: ${collectionManager.getCollectionSize()}
-                Дата инициализации: ${collectionManager.initializationTime}
-                """.trimIndent()
+            Информация о коллекции: 
+            Тип коллекции: ${collectionManager.getCollectionType()}
+            Количество элементов: ${collectionManager.getCollectionSize()}
+            Дата инициализации: ${collectionManager.initializationTime}
+            """.trimIndent()
         return Response(ResponseStatus.OK, resp)
     }
 }

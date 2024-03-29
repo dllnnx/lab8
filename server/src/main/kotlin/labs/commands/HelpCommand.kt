@@ -14,7 +14,7 @@ class HelpCommand(private val commandManager: CommandManager) :
     /**
      * Выполнить команду
      */
-    override fun execute(request: Request) : Response {
+    override fun execute(request: Request): Response {
         if (request.args.isNotEmpty()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды не требуются аргументы!")
         }

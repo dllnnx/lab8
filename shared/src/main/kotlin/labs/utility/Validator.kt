@@ -8,7 +8,7 @@ import labs.objects.Person
  * Валидатор объектов класса Person.
  * @author dllnnx
  */
-class Validator{
+class Validator {
     /**
      * Проверяет экземпляр класса Coordinates на валидность
      * @param coordinates Проверяемый экземпляр
@@ -34,9 +34,9 @@ class Validator{
      */
 
     fun validatePerson(person: Person): Boolean {
-        return person.name.isNotBlank()
-                && validateCoordinates(person.coordinates)
-                && person.height > 0
-                && validateLocation(person.location)
+        return person.name.isNotBlank() &&
+            validateCoordinates(person.coordinates) &&
+            person.height > 0 &&
+            validateLocation(person.location)
     }
 }
