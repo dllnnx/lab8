@@ -1,0 +1,12 @@
+name: builder
+
+on:
+  push
+
+jobs:
+  ktlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build
+        run: gradle fatJar
+      
