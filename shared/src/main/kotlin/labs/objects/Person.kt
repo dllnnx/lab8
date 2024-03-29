@@ -26,18 +26,16 @@ class Person(
     }
 
     override fun toString(): String {
-        return """
-            Person {
-            id = $id,
-            name = $name,
-            coordinates = $coordinates,
-            creation_date = ${creationDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss"))},
-            height = $height,
-            eye_color = $eyeColor,
-            hair_color = $hairColor,
-            nationality = $nationality,
-            location = $location
-            }
-            """.trimIndent()
+        return "Person {\n" +
+            "id = $id,\n" +
+            "name = $name,\n" +
+            "coordinates = $coordinates,\n" +
+            "creation_date = ${creationDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm:ss"))}," +
+            "height = $height,\n" +
+            "eye_color = $eyeColor,\n" +
+            "hair_color = $hairColor,\n" +
+            "nationality = $nationality,\n" +
+            "location = $location\n" +
+            "}".trimIndent()
     }
 }

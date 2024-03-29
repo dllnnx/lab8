@@ -20,10 +20,10 @@ class ExecuteScriptCommand(
     private val scriptManager: ScriptManager,
 ) :
     Command(
-            "execute_script",
-            " file_name: считать и исполнить скрипт из указанного файла. В скрипте " +
-                "содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме.",
-        ) {
+        "execute_script",
+        " file_name: считать и исполнить скрипт из указанного файла. В скрипте " +
+            "содержатся команды в таком же виде, в котором их вводит пользователь в интерактивном режиме."
+    ) {
     override fun execute(request: Request): Response {
         try {
             if (request.args.trim().split(" ").size != 1) {
