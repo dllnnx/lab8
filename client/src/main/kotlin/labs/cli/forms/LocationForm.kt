@@ -2,7 +2,7 @@ package labs.cli.forms
 
 import labs.objects.Location
 import labs.utility.Printable
-import java.util.*
+import java.util.Objects
 
 class LocationForm(console: Printable?) : Form<Location?>(console) {
     override fun build(): Location {

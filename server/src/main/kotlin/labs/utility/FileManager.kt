@@ -7,7 +7,7 @@ import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
 import java.time.ZonedDateTime
-import java.util.*
+import java.util.Scanner
 
 /**
  * Менеджер для работы с файлами.

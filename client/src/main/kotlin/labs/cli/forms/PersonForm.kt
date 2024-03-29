@@ -1,11 +1,16 @@
 package labs.cli.forms
 
-import labs.objects.*
+import labs.objects.Coordinates
+import labs.objects.Country
+import labs.objects.EyeColor
+import labs.objects.HairColor
+import labs.objects.Location
+import labs.objects.Person
 import labs.utility.Console
 import labs.utility.FileConsole
 import labs.utility.Printable
 import java.time.ZonedDateTime
-import java.util.*
+import java.util.Objects
 
 /**
  * Класс для формирования объектов типа [Person].

@@ -3,7 +3,8 @@ package labs.utility
 import labs.cli.UserInput
 import java.io.File
 import java.io.FileNotFoundException
-import java.util.*
+import java.util.ArrayDeque
+import java.util.Scanner
 
 class ScriptManager : UserInput {
     /**

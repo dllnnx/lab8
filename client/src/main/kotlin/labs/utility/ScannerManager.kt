@@ -1,6 +1,6 @@
 package labs.utility
 
-import java.util.*
+import java.util.Scanner
 
 /**
  * Класс для хранения стандартного сканера для программы.

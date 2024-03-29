@@ -6,7 +6,7 @@ import labs.utility.Console
 import labs.utility.FileConsole
 import labs.utility.Printable
 import labs.utility.ScriptManager
-import java.util.*
+import java.util.Locale
 import java.util.function.Predicate
 
 /**

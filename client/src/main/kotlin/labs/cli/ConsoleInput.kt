@@ -1,7 +1,7 @@
 package labs.cli
 
 import labs.utility.ScannerManager
-import java.util.*
+import java.util.Scanner
 
 /**
  * Класс для ввода через стандартную консоль.

@@ -1,6 +1,6 @@
 package labs.commands
 
-import java.util.*
+import java.util.Objects
 
 /**
  * Абстрактный класс для всех команд
