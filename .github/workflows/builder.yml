@@ -8,6 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: build client jar
-        run: ./gradlew :client:fatJar
+        run: gradle :client:fatJar
       - name: build server jar
-        run: ./gradlew :server:fatJar
+        run: gradle :server:fatJar
