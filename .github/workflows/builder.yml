@@ -1,13 +1,16 @@
 name: builder
 
 on:
-  push
+  workflow_run:
+    workflows: ["ktlint"]
+    types: 
+      - completed
 
 jobs:
   ktlint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: build client jar
         run: gradle :client:fatJar
       - name: build server jar
