@@ -20,9 +20,10 @@ import labs.utility.Console
 import labs.utility.FileManager
 import labs.utility.RequestHandler
 import labs.utility.Server
+import kotlin.properties.Delegates
 
 object Main {
-    private var port = 6086
+    private var port by Delegates.notNull<Int>()
     private var console = Console()
 
     @JvmStatic
@@ -30,8 +31,14 @@ object Main {
         if (args.isNotEmpty()) {
             try {
                 port = args[0].toInt()
-            } catch (_: NumberFormatException) {
+                if (port < 0) throw NumberFormatException()
+            } catch (e: NumberFormatException) {
+                console.printError("Порт должен быть натуральным числом!")
+                return
             }
+        } else {
+            console.printError("Передайте порт в аргументы командной строки!")
+            return
         }
 
         val collectionManager = CollectionManager()

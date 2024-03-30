@@ -6,9 +6,9 @@ import labs.utility.RuntimeManager
 import java.util.Scanner
 
 object Main {
-    val console = Console()
-    lateinit var host: String
-    var port: Int = 0
+    private val console = Console()
+    private lateinit var host: String
+    private var port: Int = 0
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -19,13 +19,15 @@ object Main {
 
     private fun parseHostPort(args: Array<String>): Boolean {
         if (args.size != 2) {
-            console.printError("Передайте хост и порт в аргументы командной строки в формате <host> <port>")
+            console.printError("Передайте хост и порт в аргументы командной строки в формате <host> <port>!")
             return false
         }
-        host = args[0]
-        port = args[1].toInt()
-        if (port < 0) {
-            console.printError("Порт должен быть натуральным числом")
+        try {
+            host = args[0]
+            port = args[1].toInt()
+            if (port < 0) throw NumberFormatException()
+        } catch (e: NumberFormatException) {
+            console.printError("Порт должен быть натуральным числом!")
             return false
         }
         return true

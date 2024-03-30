@@ -20,7 +20,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("labs.client.Main")
+    mainClass.set("labs.Main")
 }
 
 tasks.test {

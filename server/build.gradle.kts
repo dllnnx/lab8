@@ -13,7 +13,7 @@ repositories {
 }
 
 application {
-    mainClass.set("labs.server.Main")
+    mainClass.set("labs.Main")
 }
 
 dependencies {
