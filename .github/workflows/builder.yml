@@ -16,11 +16,11 @@ jobs:
       - name: build server jar
         run: gradle :server:fatJar
       - name: deploy client jar to helios
-        uses: appleboy/scp-action@v0.1.7
+        uses: garygrossgarten/github-action-scp@release
         with:
+          local: ./client/build/libs/client-1.0-app.jar
+          remote: prog/lab6
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          source: "./client/build/libs/client-1.0-app.jar"
-          target: "/prog/lab6/"
