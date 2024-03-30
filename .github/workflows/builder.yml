@@ -1,15 +1,14 @@
 name: builder
 
 on:
-  workflow_run:
-    workflows: ["ktlint"]
-    branches: [lab6]
-    types: 
-      - completed
+  push
 
 jobs:
-  ktlint:
+  lint:
+    uses: ./.github/workflows/linter.yml
+  build:
     runs-on: ubuntu-latest
+    needs: [lint]
     steps:
       - uses: actions/checkout@v3
       - name: build client jar
