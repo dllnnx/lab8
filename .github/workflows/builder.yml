@@ -1,7 +1,7 @@
 name: builder
 
 on:
-  [workflow_call]
+  push
 
 jobs:
   lint:
@@ -15,3 +15,12 @@ jobs:
         run: gradle :client:fatJar
       - name: build server jar
         run: gradle :server:fatJar
+      - name: deploy client jar to helios
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: "./client/build/libs/client-1.0-app.jar"
+          target: "/prog/lab6/"
