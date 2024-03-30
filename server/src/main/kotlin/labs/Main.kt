@@ -63,7 +63,7 @@ object Main {
                 MaxByNationalityCommand(collectionManager),
                 ShuffleCommand(collectionManager),
                 HistoryCommand(commandManager),
-                ExecuteScriptCommand()
+                ExecuteScriptCommand(),
             ),
         )
 

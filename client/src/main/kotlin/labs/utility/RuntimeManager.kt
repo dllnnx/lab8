@@ -13,8 +13,12 @@ import kotlin.NoSuchElementException
  * Класс для обработки запуска программы.
  * @author dllnnx
  */
-class RuntimeManager(private var console: Printable, private var userScanner: Scanner, private var client: Client,
-    private var scriptManager: ScriptManager) {
+class RuntimeManager(
+    private var console: Printable,
+    private var userScanner: Scanner,
+    private var client: Client,
+    private var scriptManager: ScriptManager,
+) {
     /**
      * Запускает работу программы в интерактивном режиме (в стандартной консоли).
      */
@@ -37,7 +41,10 @@ class RuntimeManager(private var console: Printable, private var userScanner: Sc
         }
     }
 
-    private fun reactToResponse (response: Response, userCommand: List<String>) {
+    private fun reactToResponse(
+        response: Response,
+        userCommand: List<String>,
+    ) {
         when (response.status) {
             ResponseStatus.OK -> {
                 if (response.collection == null) {
@@ -52,8 +59,13 @@ class RuntimeManager(private var console: Printable, private var userScanner: Sc
 
             ResponseStatus.ERROR -> console.printError(response.message)
             ResponseStatus.WRONG_ARGUMENTS -> console.printError(response.message)
-            ResponseStatus.WARNING -> console.println(ConsoleColor.setConsoleColor(response.message,
-                ConsoleColor.YELLOW))
+            ResponseStatus.WARNING ->
+                console.println(
+                    ConsoleColor.setConsoleColor(
+                        response.message,
+                        ConsoleColor.YELLOW,
+                    ),
+                )
 
             ResponseStatus.OBJECT_REQUIRED -> {
                 val person = PersonForm(console).build()
@@ -82,8 +94,12 @@ class RuntimeManager(private var console: Printable, private var userScanner: Sc
             ResponseStatus.EXECUTE_SCRIPT -> scriptExecutionMode(response.message)
 
             ResponseStatus.EXIT -> {
-                console.println(ConsoleColor.setConsoleColor("Программа завершена. До свидания!))",
-                    ConsoleColor.PURPLE))
+                console.println(
+                    ConsoleColor.setConsoleColor(
+                        "Программа завершена. До свидания!))",
+                        ConsoleColor.PURPLE,
+                    ),
+                )
                 return
             }
         }
@@ -100,15 +116,21 @@ class RuntimeManager(private var console: Printable, private var userScanner: Sc
                 val command: List<String> = ("$line ").split(" ", limit = 2)
                 if (command[0] == "execute_script") {
                     if (ScriptManager.isRecursive(command[1].trim())) {
-                        console.printError("Найдена рекурсия! Повторно вызывается файл "
-                            + File(command[1]).absolutePath)
+                        console.printError(
+                            "Найдена рекурсия! Повторно вызывается файл " +
+                                File(command[1]).absolutePath,
+                        )
                         line = scriptManager.nextLine()
                         continue
                     }
                 }
 
-                console.println(ConsoleColor.setConsoleColor("Выполнение команды " + command[0],
-                    ConsoleColor.CYAN))
+                console.println(
+                    ConsoleColor.setConsoleColor(
+                        "Выполнение команды " + command[0],
+                        ConsoleColor.CYAN,
+                    ),
+                )
                 val response = client.sendAndReceiveResponse(Request(command[0].trim(), command[1].trim()))
                 if ((command[0] == "execute_script")) {
                     Console.fileMode = true

@@ -26,7 +26,7 @@ class CommandManager {
         commandHistory.add(command)
     }
 
-    fun removeLastCommand(){
+    fun removeLastCommand() {
         commandHistory.removeLast()
     }
 }
