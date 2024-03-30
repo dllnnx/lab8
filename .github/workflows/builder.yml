@@ -1,0 +1,13 @@
+name: builder
+
+on:
+  push
+
+jobs:
+  ktlint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: build client jar
+        run: ./gradlew :client:fatJar
+      - name: build server jar
+        run: ./gradlew :server:fatJar
