@@ -7,7 +7,7 @@ jobs:
   ktlint:
     runs-on: ubuntu-latest
     steps:
-      - run: gradle init
+      - uses: actions/checkout@v2
       - name: build client jar
         run: gradle :client:fatJar
       - name: build server jar
