@@ -20,7 +20,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           source: "./client/build/libs/client-1.0-app.jar"
           target: "/home/studs/s408536/prog/lab6/"
