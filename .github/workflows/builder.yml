@@ -3,6 +3,7 @@ name: builder
 on:
   workflow_run:
     workflows: ["ktlint"]
+    branches: [lab6]
     types: 
       - completed
 
