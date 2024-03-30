@@ -16,12 +16,6 @@ jobs:
       - name: build server jar
         run: gradle :server:fatJar
       - name: deploy client jar to helios
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
-          source: "./client/build/libs/client-1.0-app.jar"
-          target: "/prog/lab6/"
-          
+        run: |
+          scp -P 2222 ./client/build/libs/client-1.0-app.jar s408536@helios.se.ifmo.ru
+          LAPm(6632
