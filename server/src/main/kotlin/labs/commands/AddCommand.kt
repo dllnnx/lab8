@@ -4,13 +4,14 @@ import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
 import labs.utility.CollectionManager
+import labs.utility.CommandManager
 import java.util.Objects
 
 /**
  * Команда add {element}. Добавляет новый элемент в коллекцию.
  * @author dllnnx
  */
-class AddCommand(private val collectionManager: CollectionManager) :
+class AddCommand(private val collectionManager: CollectionManager, private val commandManager: CommandManager) :
     Command("add", " {element}: добавить новый элемент в коллекцию.") {
     override fun execute(request: Request): Response {
         if (request.args.isNotBlank()) {
@@ -20,6 +21,7 @@ class AddCommand(private val collectionManager: CollectionManager) :
             )
         }
         if (Objects.isNull(request.person)) {
+            commandManager.removeLastCommand()
             return Response(ResponseStatus.OBJECT_REQUIRED, "Для команды $name требуется объект!")
         } else {
             request.person?.id = collectionManager.getFreeId()

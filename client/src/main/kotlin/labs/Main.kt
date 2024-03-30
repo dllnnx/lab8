@@ -3,10 +3,12 @@ package labs
 import labs.utility.Client
 import labs.utility.Console
 import labs.utility.RuntimeManager
+import labs.utility.ScriptManager
 import java.util.Scanner
 
 object Main {
     private val console = Console()
+    private val scriptManager = ScriptManager()
     private lateinit var host: String
     private var port: Int = 0
 
@@ -14,7 +16,7 @@ object Main {
     fun main(args: Array<String>) {
         if (!parseHostPort(args)) return
         val client = Client(host, port, console)
-        RuntimeManager(console, Scanner(System.`in`), client).interactiveMode()
+        RuntimeManager(console, Scanner(System.`in`), client, scriptManager).interactiveMode()
     }
 
     private fun parseHostPort(args: Array<String>): Boolean {

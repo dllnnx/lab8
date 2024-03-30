@@ -18,7 +18,7 @@ class ShuffleCommand(private val collectionManager: CollectionManager) :
 
         if (collectionManager.getCollectionSize() != 0) {
             collectionManager.shuffle()
-            return Response(ResponseStatus.OK, "\"Коллекция успешно перемешана!\"")
+            return Response(ResponseStatus.OK, "Коллекция успешно перемешана!")
         } else {
             return Response(ResponseStatus.WARNING, "Коллекция пуста!")
         }

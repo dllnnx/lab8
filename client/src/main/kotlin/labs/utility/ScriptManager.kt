@@ -37,7 +37,7 @@ class ScriptManager : UserInput {
          */
         @Throws(FileNotFoundException::class)
         fun addFile(path: String?) {
-            pathQueue.add(File(path).absolutePath)
+            pathQueue.add(File(path!!).absolutePath)
             scanners.add(Scanner(File(path)))
         }
 
@@ -47,7 +47,7 @@ class ScriptManager : UserInput {
          * @return true, если запуск рекурсивный, иначе false
          */
         fun isRecursive(path: String?): Boolean {
-            return pathQueue.contains(File(path).absolutePath)
+            return pathQueue.contains(File(path!!).absolutePath)
         }
 
         /**
@@ -56,14 +56,6 @@ class ScriptManager : UserInput {
         fun removeFile() {
             scanners.removeLast()
             pathQueue.removeLast()
-        }
-
-        fun nextLine(): String? {
-            return try {
-                scanners.getLast().nextLine()
-            } catch (e: NoSuchElementException) {
-                ""
-            }
         }
     }
 }

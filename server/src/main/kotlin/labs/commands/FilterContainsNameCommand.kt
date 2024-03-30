@@ -15,7 +15,7 @@ class FilterContainsNameCommand(private val collectionManager: CollectionManager
         " name: вывести элементы, значение поля name которых содержит заданную подстроку.",
     ) {
     override fun execute(request: Request): Response {
-        if (request.args.split(" ").size != 1) {
+        if (request.args.split(" ").size != 1 || request.args.isBlank()) {
             return Response(
                 ResponseStatus.WRONG_ARGUMENTS,
                 "Неверное количество аргументов! " +

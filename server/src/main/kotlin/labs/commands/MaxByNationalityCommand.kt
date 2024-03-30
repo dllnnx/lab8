@@ -22,7 +22,7 @@ class MaxByNationalityCommand(private val collectionManager: CollectionManager) 
         if (collectionManager.getCollectionSize() != 0) {
             return Response(
                 ResponseStatus.OK,
-                "Объект Person с максимальным значением поля nationality: " +
+                "Объект Person с максимальным значением поля nationality: \n" +
                     collectionManager.maxByNationality().toString(),
             )
         } else {

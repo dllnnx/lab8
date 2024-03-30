@@ -1,2 +1,4 @@
 info
-z
+show
+clear
+execute_script script2.txt

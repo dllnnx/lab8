@@ -25,4 +25,8 @@ class CommandManager {
     private fun addToHistory(command: String) {
         commandHistory.add(command)
     }
+
+    fun removeLastCommand(){
+        commandHistory.removeLast()
+    }
 }

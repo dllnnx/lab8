@@ -2,6 +2,7 @@ package labs
 
 import labs.commands.AddCommand
 import labs.commands.ClearCommand
+import labs.commands.ExecuteScriptCommand
 import labs.commands.ExitCommand
 import labs.commands.FilterByHeightCommand
 import labs.commands.FilterContainsNameCommand
@@ -50,7 +51,7 @@ object Main {
             listOf(
                 HelpCommand(commandManager),
                 InfoCommand(collectionManager),
-                AddCommand(collectionManager),
+                AddCommand(collectionManager, commandManager),
                 ShowCommand(collectionManager),
                 UpdateCommand(collectionManager),
                 RemoveByIdCommand(collectionManager),
@@ -62,6 +63,7 @@ object Main {
                 MaxByNationalityCommand(collectionManager),
                 ShuffleCommand(collectionManager),
                 HistoryCommand(commandManager),
+                ExecuteScriptCommand()
             ),
         )
 

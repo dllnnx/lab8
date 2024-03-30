@@ -12,15 +12,18 @@ import labs.utility.CollectionManager
 class RemoveByIdCommand(private val collectionManager: CollectionManager) :
     Command("remove_by_id", " id: удалить элемент из коллекции по его id.") {
     override fun execute(request: Request): Response {
-        try {
-            if (request.args.split(" ").size != 1) {
-                return Response(
-                    ResponseStatus.WRONG_ARGUMENTS,
-                    "Неверное количество аргументов! " +
-                        "Введено: " + request.args.split(" ").size + ", ожидалось: 1.",
-                )
-            }
+        if (request.args.isBlank()) {
+            return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды требуется аргумент!")
+        }
+        if (request.args.split(" ").size != 1) {
+            return Response(
+                ResponseStatus.WRONG_ARGUMENTS,
+                "Неверное количество аргументов! " +
+                    "Введено: " + request.args.split(" ").size + ", ожидалось: 1.",
+            )
+        }
 
+        try {
             if (collectionManager.getCollectionSize() != 0) {
                 val id = request.args.trim().toLong()
                 return if (collectionManager.removeById(id)) {
