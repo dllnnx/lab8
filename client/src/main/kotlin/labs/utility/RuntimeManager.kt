@@ -8,6 +8,7 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.util.Scanner
 import kotlin.NoSuchElementException
+import kotlin.system.exitProcess
 
 /**
  * Класс для обработки запуска программы.
@@ -100,7 +101,7 @@ class RuntimeManager(
                         ConsoleColor.PURPLE,
                     ),
                 )
-                return
+                exitProcess(0)
             }
         }
     }

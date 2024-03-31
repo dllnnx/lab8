@@ -11,8 +11,11 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.net.InetSocketAddress
 import java.net.SocketAddress
+import java.nio.channels.SelectionKey
+import java.nio.channels.Selector
 import java.nio.channels.ServerSocketChannel
 import java.nio.channels.SocketChannel
+import java.util.concurrent.TimeoutException
 
 class Server(private val port: Int, private val handler: RequestHandler, private val fileManager: FileManager) {
     private var socketChannel: SocketChannel? = null
@@ -20,12 +23,16 @@ class Server(private val port: Int, private val handler: RequestHandler, private
     private lateinit var serverSocketChannel: ServerSocketChannel
     private val bf = BufferedInputStream(System.`in`)
     private val bfReader = BufferedReader(InputStreamReader(bf))
+//    private lateinit var selector: Selector
 
     private fun openServerSocket() {
         try {
             val socketAddress: SocketAddress = InetSocketAddress(port)
+//            selector = Selector.open()
             serverSocketChannel = ServerSocketChannel.open()
+//            serverSocketChannel.configureBlocking(false)
             serverSocketChannel.bind(socketAddress)
+//            serverSocketChannel.register(selector, SelectionKey.OP_CONNECT)
         } catch (e: IllegalArgumentException) {
             console.printError("Порт находится за пределами возможных значений! :((")
             throw OpeningServerException()
@@ -33,6 +40,7 @@ class Server(private val port: Int, private val handler: RequestHandler, private
     }
 
     private fun connectToClient(): SocketChannel {
+        serverSocketChannel.socket().soTimeout = 50;
         socketChannel = serverSocketChannel.socket().accept().channel
         console.println("Соединение с клиентом успешно установлено!")
         return socketChannel!!
@@ -53,9 +61,9 @@ class Server(private val port: Int, private val handler: RequestHandler, private
             }
         } catch (e: IOException) {
             if (userRequest == null) {
-                console.printError("оо нет разрыв")
+                console.printError("Произошел непредвиденный разрыв соединения с сервером :((")
             } else {
-                console.println("ооо даа разрыв")
+                console.println("Соединение с сервером успешно разорвано!")
             }
         }
         return true
@@ -77,21 +85,21 @@ class Server(private val port: Int, private val handler: RequestHandler, private
         try {
             openServerSocket()
             while (true) {
-                try {
-                    if (bfReader.ready()) {
-                        val line = bfReader.readLine()
-                        if (line.equals("save")) fileManager.saveObjects()
-                    }
-                } catch (_: IOException) {
+                if (bfReader.ready()) {
+                    val line = bfReader.readLine()
+                    if (line.equals("save")) fileManager.saveObjects()
                 }
-                val clientSocket: SocketChannel = connectToClient()
+
                 try {
+                    val clientSocket: SocketChannel = connectToClient()
                     clientSocket.use {
                         if (!processClientRequest(clientSocket)) {
                             stop()
                             return
                         }
                     }
+                } catch (_: TimeoutException) {
+                    // если не поступил запрос от клиента -> ждем дальше
                 } catch (e: IOException) {
                     console.printError("Ошибка при попытке завершить соединение с клиентом!")
                 }

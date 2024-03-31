@@ -21,6 +21,7 @@ import labs.utility.Console
 import labs.utility.FileManager
 import labs.utility.RequestHandler
 import labs.utility.Server
+import java.io.File
 import kotlin.properties.Delegates
 
 object Main {
@@ -42,6 +43,7 @@ object Main {
             return
         }
 
+        System.setProperty("file_path", File("data.json").absolutePath)
         val collectionManager = CollectionManager()
         val fileManager = FileManager(console, collectionManager)
         fileManager.fillCollection()
