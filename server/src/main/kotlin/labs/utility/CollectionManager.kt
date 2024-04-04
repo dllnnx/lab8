@@ -1,6 +1,7 @@
 package labs.utility
 
 import labs.objects.Person
+import org.apache.logging.log4j.kotlin.logger
 import java.util.Date
 import java.util.LinkedList
 
@@ -14,6 +15,7 @@ class CollectionManager {
      */
     val initializationTime = Date()
     var collection: LinkedList<Person?> = LinkedList()
+    private val logger = logger()
 
     /**
      * Возвращает имя типа коллекции
@@ -37,6 +39,12 @@ class CollectionManager {
      */
     fun addElement(person: Person?) {
         person?.id = getFreeId()
+        collection.add(person)
+    }
+
+    fun updateById(person: Person?, id: Long){
+        removeById(id)
+        person?.id = id
         collection.add(person)
     }
 
@@ -67,6 +75,7 @@ class CollectionManager {
      */
     fun clearCollection() {
         collection.clear()
+        logger.info("Коллекция очищена")
     }
 
     /**

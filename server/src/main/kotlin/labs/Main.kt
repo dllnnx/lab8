@@ -21,13 +21,14 @@ import labs.utility.Console
 import labs.utility.FileManager
 import labs.utility.RequestHandler
 import labs.utility.Server
+import org.apache.logging.log4j.kotlin.logger
 import java.io.File
 import kotlin.properties.Delegates
-//import org.apache.logging.log4j.kotlin.logger
 
 object Main {
     private var port by Delegates.notNull<Int>()
     private var console = Console()
+    private var logger = logger()
 
     @JvmStatic
     fun main(args: Array<String>) {
@@ -37,18 +38,22 @@ object Main {
                 if (port < 0) throw NumberFormatException()
             } catch (e: NumberFormatException) {
                 console.printError("Порт должен быть натуральным числом!")
+                logger.error("Неправильное значение порта. Завершение работы.")
                 return
             }
         } else {
             console.printError("Передайте порт в аргументы командной строки!")
+            logger.error("В аргументы командной строки не введен порт. Завершение работы.")
             return
         }
+        logger.info("Порт успешно получен из аргументов командной строки.")
 
-//        val log = logger("Main")
+        logger.info("Создание объектов...")
         System.setProperty("file_path", File("data.json").absolutePath)
         val collectionManager = CollectionManager()
         val fileManager = FileManager(console, collectionManager)
         fileManager.fillCollection()
+        logger.info("Коллекция успешно заполнена объектами из файла.")
 
         val commandManager = CommandManager()
         commandManager.addCommands(
@@ -70,9 +75,9 @@ object Main {
                 ExecuteScriptCommand(),
             ),
         )
-
         val requestHandler = RequestHandler(commandManager)
         val server = Server(port, requestHandler, fileManager)
+        logger.info("Создан объект сервера.")
         server.run()
     }
 }

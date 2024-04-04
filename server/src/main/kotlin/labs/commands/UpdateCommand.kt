@@ -31,8 +31,7 @@ class UpdateCommand(private val collectionManager: CollectionManager) :
 
             val id = request.args.trim().split(" ")[0].toLong()
             if (collectionManager.getById(id) != null) {
-                collectionManager.removeById(id)
-                collectionManager.addElement(request.person)
+                collectionManager.updateById(request.person, id)
                 return Response(ResponseStatus.OK, "Элемент Person с id = $id обновлен успешно!")
             } else {
                 return Response(ResponseStatus.WARNING, "Нет элемента с таким id в коллекции!")

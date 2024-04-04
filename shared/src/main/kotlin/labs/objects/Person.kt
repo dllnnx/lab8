@@ -1,8 +1,8 @@
 package labs.objects
 
+import java.io.Serializable
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.io.Serializable
 
 /**
  * Класс человека.
@@ -20,6 +20,19 @@ class Person(
     var location: Location,
 ) : Comparable<Person?>, Serializable {
     var id: Long = 0
+
+    constructor(
+        id: Long,
+        name: String,
+        coordinates: Coordinates,
+        creationDate: ZonedDateTime,
+        height: Int,
+        eyeColor: EyeColor,
+        hairColor: HairColor,
+        nationality: Country,
+        location: Location) : this(name, coordinates, creationDate, height, eyeColor, hairColor, nationality, location) {
+        this.id = id
+    }
 
     override fun compareTo(other: Person?): Int {
         return name.compareTo(other?.name!!)

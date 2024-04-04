@@ -15,7 +15,7 @@ object Main {
     @JvmStatic
     fun main(args: Array<String>) {
         if (!parseHostPort(args)) return
-        val client = Client(host, port)
+        val client = Client(host, port, 2000, 5, console)
         RuntimeManager(console, Scanner(System.`in`), client, scriptManager).interactiveMode()
     }
 
