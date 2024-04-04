@@ -23,6 +23,7 @@ import labs.utility.RequestHandler
 import labs.utility.Server
 import java.io.File
 import kotlin.properties.Delegates
+//import org.apache.logging.log4j.kotlin.logger
 
 object Main {
     private var port by Delegates.notNull<Int>()
@@ -43,6 +44,7 @@ object Main {
             return
         }
 
+//        val log = logger("Main")
         System.setProperty("file_path", File("data.json").absolutePath)
         val collectionManager = CollectionManager()
         val fileManager = FileManager(console, collectionManager)

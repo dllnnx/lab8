@@ -9,7 +9,7 @@ import java.io.ObjectOutputStream
 import java.net.Socket
 import java.util.Objects
 
-class Client(private val host: String, private val port: Int, console: Printable) {
+class Client(private val host: String, private val port: Int) {
     private lateinit var socket: Socket
     private var serverWriter: ObjectOutputStream? = null
     private var serverReader: ObjectInputStream? = null
@@ -17,7 +17,6 @@ class Client(private val host: String, private val port: Int, console: Printable
     private fun connectToServer() {
         socket = Socket(host, port)
         serverWriter = ObjectOutputStream(socket.getOutputStream())
-        serverReader = ObjectInputStream(socket.getInputStream())
     }
 
     private fun disconnectFromServer() {
@@ -31,17 +30,19 @@ class Client(private val host: String, private val port: Int, console: Printable
     fun sendAndReceiveResponse(request: Request): Response {
         while (true) {
             try {
-                if (Objects.isNull(serverReader) || Objects.isNull(serverWriter)) {
+                if (Objects.isNull(serverWriter)) {
                     connectToServer()
                 } else {
                     if (request.isEmpty()) return Response(ResponseStatus.WRONG_ARGUMENTS, "Запрос пустой :(")
                     serverWriter!!.writeObject(request)
                     serverWriter!!.flush()
+                    serverReader = ObjectInputStream(socket.getInputStream())
                     val response = serverReader!!.readObject() as Response
                     disconnectFromServer()
                     return response
                 }
             } catch (e: IOException) {
+                print(e)
                 connectToServer()
             }
         }

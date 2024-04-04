@@ -1,8 +1,8 @@
 package labs.objects
 
-import java.io.Serializable
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import java.io.Serializable
 
 /**
  * Класс человека.

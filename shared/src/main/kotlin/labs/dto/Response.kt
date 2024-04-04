@@ -4,7 +4,7 @@ import labs.objects.Person
 import java.io.Serializable
 import java.util.LinkedList
 
-class Response(var status: ResponseStatus) : Serializable {
+class Response(var status: ResponseStatus): Serializable {
     var message = ""
     var collection: LinkedList<Person?>? = null
 
