@@ -42,7 +42,10 @@ class CollectionManager {
         collection.add(person)
     }
 
-    fun updateById(person: Person?, id: Long){
+    fun updateById(
+        person: Person?,
+        id: Long,
+    ) {
         removeById(id)
         person?.id = id
         collection.add(person)

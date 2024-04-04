@@ -17,7 +17,6 @@ import java.nio.channels.SelectionKey
 import java.nio.channels.Selector
 import java.nio.channels.ServerSocketChannel
 import java.nio.channels.SocketChannel
-import kotlin.math.log
 
 class Server(private val port: Int, private val handler: RequestHandler, private val fileManager: FileManager) {
     private val console: Printable = Console()

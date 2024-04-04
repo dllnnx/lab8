@@ -10,8 +10,13 @@ import java.net.ConnectException
 import java.net.Socket
 import java.util.Objects
 
-class Client(private val host: String, private val port: Int, private val reconnectionTimeout: Long,
-             private val maxReconnectionAttempts: Int, private val console: Printable) {
+class Client(
+    private val host: String,
+    private val port: Int,
+    private val reconnectionTimeout: Long,
+    private val maxReconnectionAttempts: Int,
+    private val console: Printable,
+) {
     private lateinit var socket: Socket
     private var serverWriter: ObjectOutputStream? = null
     private var serverReader: ObjectInputStream? = null
@@ -58,8 +63,9 @@ class Client(private val host: String, private val port: Int, private val reconn
 
                             console.println(
                                 ConsoleColor.setConsoleColor(
-                                    "Повторная попытка подключения через $reconnectionTimeout ms", ConsoleColor.YELLOW
-                                )
+                                    "Повторная попытка подключения через $reconnectionTimeout ms",
+                                    ConsoleColor.YELLOW,
+                                ),
                             )
                             Thread.sleep(reconnectionTimeout)
                             connectToServer()

@@ -30,7 +30,8 @@ class Person(
         eyeColor: EyeColor,
         hairColor: HairColor,
         nationality: Country,
-        location: Location) : this(name, coordinates, creationDate, height, eyeColor, hairColor, nationality, location) {
+        location: Location,
+    ) : this(name, coordinates, creationDate, height, eyeColor, hairColor, nationality, location) {
         this.id = id
     }
 

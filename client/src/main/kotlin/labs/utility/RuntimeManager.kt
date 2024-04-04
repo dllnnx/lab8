@@ -29,7 +29,7 @@ class RuntimeManager(
         while (true) {
             try {
                 console.print("$ ")
-                if (!userScanner.hasNext()) {
+                if (!userScanner.hasNextLine()) {
                     console.println(ConsoleColor.setConsoleColor("Программа завершена. До свидания!))", ConsoleColor.PURPLE))
                     return
                 }
