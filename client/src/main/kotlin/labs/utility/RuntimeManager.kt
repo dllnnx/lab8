@@ -83,12 +83,16 @@ class RuntimeManager(
                         ),
                     )
 
-                if (newResponse.status == ResponseStatus.OK) {
-                    console.println(ConsoleColor.setConsoleColor(newResponse.message, ConsoleColor.GREEN))
-                } else if (newResponse.status == ResponseStatus.WARNING) {
-                    console.println(ConsoleColor.setConsoleColor(newResponse.message, ConsoleColor.YELLOW))
-                } else {
-                    console.printError(newResponse.message)
+                when (newResponse.status) {
+                    ResponseStatus.OK -> {
+                        console.println(ConsoleColor.setConsoleColor(newResponse.message, ConsoleColor.GREEN))
+                    }
+                    ResponseStatus.WARNING -> {
+                        console.println(ConsoleColor.setConsoleColor(newResponse.message, ConsoleColor.YELLOW))
+                    }
+                    else -> {
+                        console.printError(newResponse.message)
+                    }
                 }
             }
 

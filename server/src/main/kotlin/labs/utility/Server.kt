@@ -7,10 +7,10 @@ import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.EOFException
 import java.io.InputStreamReader
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
+import java.io.StreamCorruptedException
 import java.net.InetSocketAddress
 import java.nio.ByteBuffer
 import java.nio.channels.SelectionKey
@@ -47,7 +47,7 @@ class Server(private val port: Int, private val handler: RequestHandler, private
             while (true) {
                 if (bfReader.ready()) {
                     val line = bfReader.readLine()
-                    if (line.equals("save")) {
+                    if (line.equals("s")) {
                         fileManager.saveObjects()
                         logger.info("Коллекция сохранена.")
                     }
@@ -61,7 +61,6 @@ class Server(private val port: Int, private val handler: RequestHandler, private
                             logger.info("Создано соединение с клиентом.")
                         }
                         key.isReadable -> {
-                            Thread.sleep(50)
                             processClientRequest(key)
                         }
                     }
@@ -81,37 +80,40 @@ class Server(private val port: Int, private val handler: RequestHandler, private
         clientChannel.register(selector, SelectionKey.OP_READ or SelectionKey.OP_WRITE)
     }
 
+    private fun getRequest(clientChannel: SocketChannel): Request? {
+        val buffer = ByteBuffer.allocate(1024 * 4)
+        while (true) {
+            try {
+                val bytesRead = clientChannel.read(buffer)
+                if (bytesRead == -1) {
+                    clientChannel.close()
+                    return null
+                }
+                val ois = ObjectInputStream(ByteArrayInputStream(buffer.array()))
+                val userRequest = ois.readObject() as Request
+                ois.close()
+                return userRequest
+            } catch (_: StreamCorruptedException) {
+                // если считали объект не до конца - пробуем еще раз
+            }
+        }
+    }
+
     private fun processClientRequest(key: SelectionKey) {
         val clientChannel = key.channel() as SocketChannel
         clientChannel.configureBlocking(false)
-        val buffer = ByteBuffer.allocate(4096)
-        val bytesRead = clientChannel.read(buffer)
-        if (bytesRead == -1) {
-            clientChannel.close()
-            return
-        }
+        val userRequest = getRequest(clientChannel)
+        logger.info("Получен запрос от клиента.")
+        if (userRequest == null) return
 
-        try {
-            buffer.flip()
-            val data = ByteArray(buffer.remaining())
-            buffer.get(data)
-            val ois = ObjectInputStream(ByteArrayInputStream(data))
-            val userRequest = ois.readObject() as Request
-            logger.info("Получен запрос от клиента.")
-            ois.close()
-            val responseToUser = handler.handle(userRequest)
-            logger.info("Запрос обработан.")
-            val baos = ByteArrayOutputStream()
-            val oos = ObjectOutputStream(baos)
-            oos.writeObject(responseToUser)
-            oos.flush()
-            val responseData = baos.toByteArray()
-            clientChannel.write(ByteBuffer.wrap(responseData))
-            logger.info("Отправлен ответ клиенту.")
-        } catch (_: EOFException) {
-            // выбрасывается, когда все данные в потоке прочтены
-        }
-
-        buffer.clear()
+        val responseToUser = handler.handle(userRequest)
+        logger.info("Запрос обработан.")
+        val baos = ByteArrayOutputStream()
+        val oos = ObjectOutputStream(baos)
+        oos.writeObject(responseToUser)
+        oos.flush()
+        val responseData = baos.toByteArray()
+        clientChannel.write(ByteBuffer.wrap(responseData))
+        logger.info("Отправлен ответ клиенту.")
     }
 }
