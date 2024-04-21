@@ -8,6 +8,7 @@ import labs.dto.ResponseStatus
 class CommandManager {
     var commands = HashMap<String, Command>()
     var commandHistory = ArrayList<String>()
+    private val maxCommandHistorySize = 10
 
     fun addCommands(commands: Collection<Command>) {
         this.commands.putAll(commands.associateBy { it.name })
@@ -23,6 +24,9 @@ class CommandManager {
     }
 
     private fun addToHistory(command: String) {
+        if (commandHistory.size >= maxCommandHistorySize) {
+            commandHistory.removeFirst()
+        }
         commandHistory.add(command)
     }
 

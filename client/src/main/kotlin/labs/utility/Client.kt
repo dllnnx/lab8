@@ -26,19 +26,27 @@ class Client(
         socket = Socket(host, port)
     }
 
+    private fun disconnectFromServer() {
+        socket!!.close()
+        serverWriter!!.close()
+        serverReader!!.close()
+        serverWriter = null
+        serverReader = null
+    }
+
     fun sendAndReceiveResponse(request: Request): Response {
         while (true) {
             try {
                 if (Objects.isNull(socket)) {
                     connectToServer()
                 } else {
-                    reconnectionAttempts = 0
                     if (request.isEmpty()) return Response(ResponseStatus.WRONG_ARGUMENTS, "Запрос пустой :(")
                     serverWriter = ObjectOutputStream(socket!!.getOutputStream())
                     serverWriter!!.writeObject(request)
                     serverWriter!!.flush()
                     serverReader = ObjectInputStream(socket!!.getInputStream())
                     val response = serverReader!!.readObject() as Response
+                    reconnectionAttempts = 0
                     return response
                 }
             } catch (e: Exception) {
@@ -49,6 +57,7 @@ class Client(
                             reconnectionAttempts++
                             if (reconnectionAttempts >= maxReconnectionAttempts) {
                                 console.printError("Превышено максимальное количество попыток соединения с сервером.")
+                                disconnectFromServer()
                                 return Response(ResponseStatus.EXIT)
                             }
 

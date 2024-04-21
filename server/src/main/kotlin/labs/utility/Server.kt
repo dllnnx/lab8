@@ -55,7 +55,7 @@ class Server(private val port: Int, private val handler: RequestHandler, private
                 val ready = selector.select(50)
                 if (ready == 0) continue
                 val keys = selector.selectedKeys().iterator()
-                while (keys.hasNext()){
+                while (keys.hasNext()) {
                     val key = keys.next()
                     when (key.readyOps()) {
                         SelectionKey.OP_ACCEPT -> {
