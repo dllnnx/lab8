@@ -4,7 +4,6 @@ import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
 import labs.utility.CommandManager
-import kotlin.math.max
 
 /**
  * Команда history. Выводит последние 10 команд (без их аргументов).
