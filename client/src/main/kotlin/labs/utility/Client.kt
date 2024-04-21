@@ -17,18 +17,17 @@ class Client(
     private val maxReconnectionAttempts: Int,
     private val console: Printable,
 ) {
-    private lateinit var socket: Socket
+    private var socket: Socket? = null
     private var serverWriter: ObjectOutputStream? = null
     private var serverReader: ObjectInputStream? = null
     private var reconnectionAttempts = 0
 
     private fun connectToServer() {
         socket = Socket(host, port)
-        serverWriter = ObjectOutputStream(socket.getOutputStream())
     }
 
     private fun disconnectFromServer() {
-        socket.close()
+        socket!!.close()
         serverWriter!!.close()
         serverReader!!.close()
         serverWriter = null
@@ -38,16 +37,16 @@ class Client(
     fun sendAndReceiveResponse(request: Request): Response {
         while (true) {
             try {
-                if (Objects.isNull(serverWriter)) {
+                if (Objects.isNull(socket)) {
                     connectToServer()
                 } else {
-                    reconnectionAttempts = 0
                     if (request.isEmpty()) return Response(ResponseStatus.WRONG_ARGUMENTS, "Запрос пустой :(")
+                    serverWriter = ObjectOutputStream(socket!!.getOutputStream())
                     serverWriter!!.writeObject(request)
                     serverWriter!!.flush()
-                    serverReader = ObjectInputStream(socket.getInputStream())
+                    serverReader = ObjectInputStream(socket!!.getInputStream())
                     val response = serverReader!!.readObject() as Response
-                    disconnectFromServer()
+                    reconnectionAttempts = 0
                     return response
                 }
             } catch (e: Exception) {
@@ -58,6 +57,7 @@ class Client(
                             reconnectionAttempts++
                             if (reconnectionAttempts >= maxReconnectionAttempts) {
                                 console.printError("Превышено максимальное количество попыток соединения с сервером.")
+                                disconnectFromServer()
                                 return Response(ResponseStatus.EXIT)
                             }
 

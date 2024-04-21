@@ -52,19 +52,22 @@ class Server(private val port: Int, private val handler: RequestHandler, private
                         logger.info("Коллекция сохранена.")
                     }
                 }
-                selector.select(50)
-                val keys = selector.selectedKeys()
-                keys.forEach { key ->
-                    when {
-                        key.isAcceptable -> {
+                val ready = selector.select(50)
+                if (ready == 0) continue
+                val keys = selector.selectedKeys().iterator()
+                while (keys.hasNext()) {
+                    val key = keys.next()
+                    when (key.readyOps()) {
+                        SelectionKey.OP_ACCEPT -> {
                             acceptClient()
                             logger.info("Создано соединение с клиентом.")
                         }
-                        key.isReadable -> {
+
+                        SelectionKey.OP_READ -> {
                             processClientRequest(key)
                         }
                     }
-                    keys.remove(key)
+                    keys.remove()
                 }
             }
         } catch (e: IllegalArgumentException) {
@@ -77,7 +80,7 @@ class Server(private val port: Int, private val handler: RequestHandler, private
     private fun acceptClient() {
         val clientChannel = serverSocketChannel.accept()
         clientChannel.configureBlocking(false)
-        clientChannel.register(selector, SelectionKey.OP_READ or SelectionKey.OP_WRITE)
+        clientChannel.register(selector, SelectionKey.OP_READ)
     }
 
     private fun getRequest(clientChannel: SocketChannel): Request? {
