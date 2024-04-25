@@ -23,7 +23,7 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           source: "./client/build/libs/client-1.0-app.jar"
-          target: "/home/studs/s408536/prog/lab6/"
+          target: "/home/studs/s408536/prog/lab7/"
       - name: deploy server jar to helios
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -32,4 +32,4 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           source: "./server/build/libs/server-1.0-app.jar"
-          target: "/home/studs/s408536/prog/lab6/"
+          target: "/home/studs/s408536/prog/lab7/"
