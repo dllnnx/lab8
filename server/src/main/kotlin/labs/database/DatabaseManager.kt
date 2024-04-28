@@ -23,10 +23,10 @@ class DatabaseManager {
         try {
             val session = jsch.getSession(user, host, port)
 
-            session.setConfig("PreferredAuthentications", "publickey");
+            session.setConfig("PreferredAuthentications", "publickey")
             jsch.setKnownHosts("~/.ssh/known_hosts")
             jsch.addIdentity(privateKey)
-            session.setConfig("StrictHostKeyChecking", "no");
+            session.setConfig("StrictHostKeyChecking", "no")
             session.connect()
 
             session.setPortForwardingL(localPort, dbHost, 5432)
@@ -46,10 +46,8 @@ class DatabaseManager {
             resultSet.close()
             statement.close()
             connection.close()
-
         } catch (e: ClassNotFoundException) {
             logger.error("Драйвер для JDBC не найден.")
         }
-
     }
 }

@@ -32,88 +32,89 @@ class Server(private val port: Int, private val handler: RequestHandler, private
     private var logger = logger()
     private val channelCapacity = 10
 
-    fun run() = runBlocking {
+    fun run() =
+        runBlocking {
+            // сохранение коллекции при завершении работы сервера
+            Runtime.getRuntime().addShutdownHook(
+                Thread {
+                    fileManager.saveObjects()
+                    console.println(
+                        ConsoleColor.setConsoleColor(
+                            "Программа завершена. До свидания!))",
+                            ConsoleColor.PURPLE,
+                        ),
+                    )
+                    logger.info("Завершение работы сервера.")
+                },
+            )
 
-        Runtime.getRuntime().addShutdownHook( // сохранение коллекции при завершении работы сервера
-            Thread {
-                fileManager.saveObjects()
-                console.println(
-                    ConsoleColor.setConsoleColor(
-                        "Программа завершена. До свидания!))",
-                        ConsoleColor.PURPLE,
-                    ),
-                )
-                logger.info("Завершение работы сервера.")
-            },
-        )
+            try {
+                serverSocketChannel = ServerSocketChannel.open()
+                serverSocketChannel.socket().bind(InetSocketAddress(port))
+                serverSocketChannel.configureBlocking(false)
 
-        try {
-            serverSocketChannel = ServerSocketChannel.open()
-            serverSocketChannel.socket().bind(InetSocketAddress(port))
-            serverSocketChannel.configureBlocking(false)
+                // каналы для связи между корутинами
+                val requestChannel = Channel<Pair<SocketChannel, Request>>(channelCapacity)
+                val responseChannel = Channel<Pair<SocketChannel, Response>>(channelCapacity)
 
-            // каналы для связи между корутинами
-            val requestChannel = Channel<Pair<SocketChannel, Request>>(channelCapacity)
-            val responseChannel = Channel<Pair<SocketChannel, Response>>(channelCapacity)
+                // чтение запроса
+                launch(Dispatchers.Default) {
+                    while (true) {
+                        val ready =
+                            withContext(Dispatchers.IO) {
+                                selector.select(50)
+                            }
+                        if (ready == 0) continue
 
-            // чтение запроса
-            launch (Dispatchers.Default) {
-                while (true) {
-                    val ready = withContext(Dispatchers.IO) {
-                        selector.select(50)
-                    }
-                    if (ready == 0) continue
-
-                    val keys = selector.selectedKeys().iterator()
-                    while (keys.hasNext()) {
-                        val key = keys.next()
-                        if (key.readyOps() == SelectionKey.OP_READ) {
-                            val clientChannel = key.channel() as SocketChannel
-                            val userRequest = getRequest(clientChannel)
-                            logger.info("Получен запрос от клиента.")
-                            requestChannel.send(Pair(clientChannel, userRequest!!))
+                        val keys = selector.selectedKeys().iterator()
+                        while (keys.hasNext()) {
+                            val key = keys.next()
+                            if (key.readyOps() == SelectionKey.OP_READ) {
+                                val clientChannel = key.channel() as SocketChannel
+                                val userRequest = getRequest(clientChannel)
+                                logger.info("Получен запрос от клиента.")
+                                requestChannel.send(Pair(clientChannel, userRequest!!))
+                            }
+                            keys.remove()
                         }
-                        keys.remove()
                     }
                 }
-            }
 
-            // обработка запроса
-            launch (Dispatchers.Default) {
-                for (pair in requestChannel){
-                    val clientChannel = pair.first
-                    val userRequest = pair.second
-                    val responseToUser = handler.handle(userRequest)
-                    logger.info("Запрос обработан.")
-                    responseChannel.send(Pair(clientChannel, responseToUser))
+                // обработка запроса
+                launch(Dispatchers.Default) {
+                    for (pair in requestChannel) {
+                        val clientChannel = pair.first
+                        val userRequest = pair.second
+                        val responseToUser = handler.handle(userRequest)
+                        logger.info("Запрос обработан.")
+                        responseChannel.send(Pair(clientChannel, responseToUser))
+                    }
                 }
-            }
 
-            // отправка ответа
-            launch (Dispatchers.Default) {
-                for (pair in responseChannel) {
-                    val clientChannel = pair.first
-                    val responseToUser = pair.second
-                    sendResponse(clientChannel, responseToUser)
-                    logger.info("Отправлен ответ клиенту.")
+                // отправка ответа
+                launch(Dispatchers.Default) {
+                    for (pair in responseChannel) {
+                        val clientChannel = pair.first
+                        val responseToUser = pair.second
+                        sendResponse(clientChannel, responseToUser)
+                        logger.info("Отправлен ответ клиенту.")
+                    }
                 }
-            }
 
-            // соединение с клиентами
-            while (true) {
-                val clientChannel = acceptClient() ?: continue
-                clientChannel.configureBlocking(false)
-                launch (Dispatchers.Default) {
-                    logger.info("Создано соединение с клиентом.")
+                // соединение с клиентами
+                while (true) {
+                    val clientChannel = acceptClient() ?: continue
+                    clientChannel.configureBlocking(false)
+                    launch(Dispatchers.Default) {
+                        logger.info("Создано соединение с клиентом.")
+                    }
                 }
+            } catch (e: IllegalArgumentException) {
+                console.printError("Порт находится за пределами возможных значений! :((")
+                logger.error("Порт находится за пределами возможных значений.")
+                throw OpeningServerException()
             }
-
-        } catch (e: IllegalArgumentException) {
-            console.printError("Порт находится за пределами возможных значений! :((")
-            logger.error("Порт находится за пределами возможных значений.")
-            throw OpeningServerException()
         }
-    }
 
     private fun acceptClient(): SocketChannel? {
         val clientChannel = serverSocketChannel.accept()
@@ -141,7 +142,10 @@ class Server(private val port: Int, private val handler: RequestHandler, private
         }
     }
 
-    private fun sendResponse(clientChannel: SocketChannel, responseToUser: Response) {
+    private fun sendResponse(
+        clientChannel: SocketChannel,
+        responseToUser: Response,
+    ) {
         val baos = ByteArrayOutputStream()
         val oos = ObjectOutputStream(baos)
         oos.writeObject(responseToUser)

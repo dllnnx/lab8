@@ -15,7 +15,6 @@ import labs.commands.RemoveFirstCommand
 import labs.commands.ShowCommand
 import labs.commands.ShuffleCommand
 import labs.commands.UpdateCommand
-import labs.database.DatabaseManager
 import labs.utility.CollectionManager
 import labs.utility.CommandManager
 import labs.utility.Console
