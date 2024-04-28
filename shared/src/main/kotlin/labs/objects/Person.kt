@@ -12,14 +12,15 @@ import java.time.format.DateTimeFormatter
 class Person(
     var name: String,
     var coordinates: Coordinates,
-    private var creationDate: ZonedDateTime,
+    var creationDate: ZonedDateTime,
     var height: Int,
-    private var eyeColor: EyeColor,
-    private var hairColor: HairColor,
+    var eyeColor: EyeColor,
+    var hairColor: HairColor,
     var nationality: Country,
     var location: Location,
 ) : Comparable<Person?>, Serializable {
     var id: Long = 0
+    lateinit var userLogin: String
 
     constructor(
         id: Long,

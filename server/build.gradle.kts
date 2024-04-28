@@ -28,9 +28,8 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-api-kotlin:1.2.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2")
-    implementation("com.jcraft:jsch:0.1.55")
-    // https://mvnrepository.com/artifact/org.postgresql/postgresql
-    implementation("org.postgresql:postgresql:42.1.4")
+    implementation("com.github.mwiede:jsch:0.1.61")
+    implementation("org.postgresql:postgresql:42.7.3")
 }
 
 tasks.register<Jar>("fatJar") {

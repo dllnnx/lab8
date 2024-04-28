@@ -15,6 +15,7 @@ import labs.commands.RemoveFirstCommand
 import labs.commands.ShowCommand
 import labs.commands.ShuffleCommand
 import labs.commands.UpdateCommand
+import labs.database.DatabaseConnector
 import labs.utility.CollectionManager
 import labs.utility.CommandManager
 import labs.utility.Console
@@ -26,6 +27,15 @@ import java.io.File
 import kotlin.properties.Delegates
 
 object Main {
+    // конфигурационные переменные
+    val DATABASE_CONFIG_PATH = Main.javaClass.classLoader.getResource("dbconfig.cfg")!!.path!!
+    const val DATABASE_URL = "jdbc:postgresql://localhost:5432/studs"
+    const val JDBC_HOST = "pg"
+    const val DATABASE_HOST = "se.ifmo.ru"
+    const val DATABASE_PORT = 2222
+    const val LOCAL_PORT = 5432
+    // конфигурационные переменные
+
     private var port by Delegates.notNull<Int>()
     private var console = Console()
     private var logger = logger()
@@ -49,10 +59,14 @@ object Main {
         logger.info("Порт успешно получен из аргументов командной строки.")
 
         logger.info("Создание объектов...")
+
         System.setProperty("file_path", File("data.json").absolutePath)
+        Class.forName("org.postgresql.Driver")
+        val db = DatabaseConnector.databaseManager
+        db.run()
         val collectionManager = CollectionManager()
         val fileManager = FileManager(console, collectionManager)
-        fileManager.fillCollection()
+//        fileManager.fillCollection()
         logger.info("Коллекция успешно заполнена объектами из файла.")
 
         val commandManager = CommandManager()
@@ -78,9 +92,6 @@ object Main {
         val requestHandler = RequestHandler(commandManager)
         val server = Server(port, requestHandler, fileManager)
         logger.info("Создан объект сервера.")
-
-//        Class.forName("org.postgresql.Driver");
-//        val db = DatabaseManager()
 
         server.run()
     }

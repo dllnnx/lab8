@@ -1,5 +1,6 @@
 package labs.commands
 
+import labs.database.DatabaseConnector
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
@@ -24,7 +25,9 @@ class AddCommand(private val collectionManager: CollectionManager, private val c
             commandManager.removeLastCommand()
             return Response(ResponseStatus.OBJECT_REQUIRED, "Для команды $name требуется объект!")
         } else {
-            request.person?.id = collectionManager.getFreeId()
+            val newId = DatabaseConnector.databaseManager.addObject(request.person!!).toLong()
+            if (newId == -1L) return Response(ResponseStatus.ERROR, "Не удалось добавить объект в базу данных.")
+            request.person!!.id = newId
             collectionManager.addElement(request.person)
             return Response(ResponseStatus.OK, "Объект Person добавлен успешно!")
         }

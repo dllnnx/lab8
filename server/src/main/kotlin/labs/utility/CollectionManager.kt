@@ -1,5 +1,6 @@
 package labs.utility
 
+import labs.database.DatabaseConnector
 import labs.objects.Person
 import org.apache.logging.log4j.kotlin.logger
 import java.util.Date
@@ -9,7 +10,7 @@ import java.util.LinkedList
  * Менеджер коллекции.
  * @author dllnnx
  */
-class CollectionManager {
+class CollectionManager() {
     /**
      * Дата инициализации коллекции
      */
@@ -60,6 +61,10 @@ class CollectionManager {
         return collection.filter { it!!.id == id }.getOrElse(0) { null }
     }
 
+    fun checkExistById(id: Long): Boolean {
+        return collection.any { it!!.id == id }
+    }
+
     /**
      * Удаляет элемент коллекции по заданному значению id
      * @param id id элемента
@@ -71,6 +76,10 @@ class CollectionManager {
         } else {
             return false
         }
+    }
+
+    fun removeElements(ids: List<Long>) {
+        ids.forEach { it -> collection.remove(this.getById(it)) }
     }
 
     /**
@@ -129,5 +138,9 @@ class CollectionManager {
             if (!ids.contains(i)) return i
         }
         return collection.maxOf { it!!.id } + 1
+    }
+
+    init {
+        collection.addAll(DatabaseConnector.databaseManager.fillCollection())
     }
 }

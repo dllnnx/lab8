@@ -1,5 +1,6 @@
 package labs.commands
 
+import labs.database.DatabaseConnector
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
@@ -30,12 +31,16 @@ class UpdateCommand(private val collectionManager: CollectionManager) :
             }
 
             val id = request.args.trim().split(" ")[0].toLong()
-            if (collectionManager.getById(id) != null) {
-                collectionManager.updateById(request.person, id)
-                return Response(ResponseStatus.OK, "Элемент Person с id = $id обновлен успешно!")
-            } else {
+            if (collectionManager.getById(id) == null) {
                 return Response(ResponseStatus.WARNING, "Нет элемента с таким id в коллекции!")
             }
+
+            if (DatabaseConnector.databaseManager.updateObject(id, request.person!!)) {
+                collectionManager.updateById(request.person, id)
+                return Response(ResponseStatus.OK, "Элемент Person с id = $id обновлен успешно!")
+            }
+
+            return Response(ResponseStatus.ERROR, "Объект обновлен. Удостоверьтесь, что он был создан Вами.")
         } catch (e: IllegalArgumentException) {
             return Response(ResponseStatus.ERROR, "id должен быть типа long!")
         }

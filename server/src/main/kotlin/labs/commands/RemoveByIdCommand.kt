@@ -1,5 +1,6 @@
 package labs.commands
 
+import labs.database.DatabaseConnector
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
@@ -15,6 +16,7 @@ class RemoveByIdCommand(private val collectionManager: CollectionManager) :
         if (request.args.isBlank()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды требуется аргумент!")
         }
+
         if (request.args.split(" ").size != 1) {
             return Response(
                 ResponseStatus.WRONG_ARGUMENTS,
@@ -24,15 +26,21 @@ class RemoveByIdCommand(private val collectionManager: CollectionManager) :
         }
 
         try {
-            if (collectionManager.getCollectionSize() != 0) {
-                val id = request.args.trim().toLong()
-                return if (collectionManager.removeById(id)) {
-                    Response(ResponseStatus.OK, "Удаление элемента с id = $id произошло успешно!")
-                } else {
-                    Response(ResponseStatus.WARNING, "Нет элемента с таким id в коллекции!")
-                }
-            } else {
+            if (collectionManager.getCollectionSize() == 0) {
                 return Response(ResponseStatus.WARNING, "Коллекция пуста!")
+            }
+
+            val id = request.args.trim().toLong()
+
+            if (!collectionManager.checkExistById(id)) {
+                return Response(ResponseStatus.ERROR, "Нет элемента с таким id в коллекции!")
+            }
+
+            if (DatabaseConnector.databaseManager.deleteObjectById(id)) {
+                collectionManager.removeById(id)
+                return Response(ResponseStatus.OK, "Удаление элемента с id = $id произошло успешно!")
+            } else {
+                return Response(ResponseStatus.ERROR, "Объект не удален. Удостоверьтесь, что он был создан Вами.")
             }
         } catch (e: IllegalArgumentException) {
             return Response(ResponseStatus.ERROR, "id должен быть типа long!")

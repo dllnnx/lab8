@@ -1,3 +1,4 @@
+// я решила отчислиться 3 раза пока писала этот класс
 package labs.utility
 
 import kotlinx.coroutines.Dispatchers
@@ -9,11 +10,8 @@ import labs.dto.Request
 import labs.dto.Response
 import labs.exceptions.OpeningServerException
 import org.apache.logging.log4j.kotlin.logger
-import java.io.BufferedInputStream
-import java.io.BufferedReader
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.InputStreamReader
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.StreamCorruptedException
@@ -27,7 +25,6 @@ import java.nio.channels.SocketChannel
 class Server(private val port: Int, private val handler: RequestHandler, private val fileManager: FileManager) {
     private val console: Printable = Console()
     private lateinit var serverSocketChannel: ServerSocketChannel
-    private val bfReader = BufferedReader(InputStreamReader(BufferedInputStream(System.`in`)))
     private val selector = Selector.open()
     private var logger = logger()
     private val channelCapacity = 10
@@ -105,9 +102,7 @@ class Server(private val port: Int, private val handler: RequestHandler, private
                 while (true) {
                     val clientChannel = acceptClient() ?: continue
                     clientChannel.configureBlocking(false)
-                    launch(Dispatchers.Default) {
-                        logger.info("Создано соединение с клиентом.")
-                    }
+                    logger.info("Создано соединение с клиентом.")
                 }
             } catch (e: IllegalArgumentException) {
                 console.printError("Порт находится за пределами возможных значений! :((")
