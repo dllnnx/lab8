@@ -15,6 +15,7 @@ import labs.commands.RemoveFirstCommand
 import labs.commands.ShowCommand
 import labs.commands.ShuffleCommand
 import labs.commands.UpdateCommand
+import labs.database.DatabaseManager
 import labs.utility.CollectionManager
 import labs.utility.CommandManager
 import labs.utility.Console
@@ -78,6 +79,10 @@ object Main {
         val requestHandler = RequestHandler(commandManager)
         val server = Server(port, requestHandler, fileManager)
         logger.info("Создан объект сервера.")
+
+//        Class.forName("org.postgresql.Driver");
+//        val db = DatabaseManager()
+
         server.run()
     }
 }
