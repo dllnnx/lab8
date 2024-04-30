@@ -1,38 +1,38 @@
 [
   {
-    "name": "alena",
+    "name": "third",
     "coordinates": {
-      "x": 1.0,
-      "y": 1.0
+      "x": 3.0,
+      "y": 3.0
     },
-    "creationDate": "2024-04-29T01:50:30.111+03:00[GMT+03:00]",
-    "height": 1,
+    "creationDate": "2024-04-30T21:41:59.813+03:00[GMT+03:00]",
+    "height": 300,
+    "eyeColor": "GREEN",
+    "hairColor": "GREEN",
+    "nationality": "UNITED_KINGDOM",
+    "location": {
+      "x": 3.3,
+      "y": 3.33,
+      "name": "loc3"
+    },
+    "id": 6
+  },
+  {
+    "name": "newpers",
+    "coordinates": {
+      "x": 4.0,
+      "y": 4.0
+    },
+    "creationDate": "2024-04-30T21:42:38.423+03:00[GMT+03:00]",
+    "height": 400,
     "eyeColor": "GREEN",
     "hairColor": "GREEN",
     "nationality": "RUSSIA",
     "location": {
-      "x": 1.0,
-      "y": 1.0,
-      "name": "l1"
+      "x": 4.4,
+      "y": 4.0,
+      "name": "loc4"
     },
-    "id": 1
-  },
-  {
-    "name": "second",
-    "coordinates": {
-      "x": 2.0,
-      "y": 2.0
-    },
-    "creationDate": "2024-04-29T01:50:40.998+03:00[GMT+03:00]",
-    "height": 2,
-    "eyeColor": "YELLOW",
-    "hairColor": "BLACK",
-    "nationality": "ITALY",
-    "location": {
-      "x": 2.0,
-      "y": 2.0,
-      "name": "l2"
-    },
-    "id": 2
+    "id": 7
   }
 ]

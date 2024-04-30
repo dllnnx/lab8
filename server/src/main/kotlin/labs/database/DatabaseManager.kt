@@ -113,6 +113,9 @@ class DatabaseManager {
             logger.debug(e)
             logger.info("Неуспешная попытка удалить объект.")
             return false
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
         }
     }
 
