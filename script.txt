@@ -1,4 +1,14 @@
 help
 info
 show
-execute_script script2.txt
+add
+scriptperson
+345678
+87
+180
+green
+black
+russia
+3
+2
+locloc
