@@ -21,8 +21,9 @@ import java.nio.channels.SelectionKey
 import java.nio.channels.Selector
 import java.nio.channels.ServerSocketChannel
 import java.nio.channels.SocketChannel
+import kotlin.system.exitProcess
 
-class Server(private val port: Int, private val handler: RequestHandler, private val fileManager: FileManager) {
+class Server(private val port: Int, private val handler: RequestHandler) {
     private val console: Printable = Console()
     private lateinit var serverSocketChannel: ServerSocketChannel
     private val selector = Selector.open()
@@ -31,20 +32,6 @@ class Server(private val port: Int, private val handler: RequestHandler, private
 
     fun run() =
         runBlocking {
-            // сохранение коллекции при завершении работы сервера
-            Runtime.getRuntime().addShutdownHook(
-                Thread {
-                    fileManager.saveObjects()
-                    console.println(
-                        ConsoleColor.setConsoleColor(
-                            "Программа завершена. До свидания!))",
-                            ConsoleColor.PURPLE,
-                        ),
-                    )
-                    logger.info("Завершение работы сервера.")
-                },
-            )
-
             try {
                 serverSocketChannel = ServerSocketChannel.open()
                 serverSocketChannel.socket().bind(InetSocketAddress(port))
@@ -107,7 +94,7 @@ class Server(private val port: Int, private val handler: RequestHandler, private
             } catch (e: IllegalArgumentException) {
                 console.printError("Порт находится за пределами возможных значений! :((")
                 logger.error("Порт находится за пределами возможных значений.")
-                throw OpeningServerException()
+                exitProcess(0)
             }
         }
 

@@ -19,7 +19,6 @@ import labs.database.DatabaseConnector
 import labs.utility.CollectionManager
 import labs.utility.CommandManager
 import labs.utility.Console
-import labs.utility.FileManager
 import labs.utility.RequestHandler
 import labs.utility.Server
 import org.apache.logging.log4j.kotlin.logger
@@ -64,9 +63,8 @@ object Main {
         Class.forName("org.postgresql.Driver")
         val db = DatabaseConnector.databaseManager
         db.run()
+
         val collectionManager = CollectionManager()
-        val fileManager = FileManager(console, collectionManager)
-//        fileManager.fillCollection()
         logger.info("Коллекция успешно заполнена объектами из файла.")
 
         val commandManager = CommandManager()
@@ -90,7 +88,7 @@ object Main {
             ),
         )
         val requestHandler = RequestHandler(commandManager)
-        val server = Server(port, requestHandler, fileManager)
+        val server = Server(port, requestHandler)
         logger.info("Создан объект сервера.")
 
         server.run()
