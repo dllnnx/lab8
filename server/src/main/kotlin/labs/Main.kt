@@ -9,7 +9,9 @@ import labs.commands.FilterContainsNameCommand
 import labs.commands.HelpCommand
 import labs.commands.HistoryCommand
 import labs.commands.InfoCommand
+import labs.commands.Login
 import labs.commands.MaxByNationalityCommand
+import labs.commands.Register
 import labs.commands.RemoveByIdCommand
 import labs.commands.RemoveFirstCommand
 import labs.commands.ShowCommand
@@ -61,8 +63,8 @@ object Main {
 
         System.setProperty("file_path", File("data.json").absolutePath)
         Class.forName("org.postgresql.Driver")
-        val db = DatabaseConnector.databaseManager
-        db.run()
+        val dbManager = DatabaseConnector.databaseManager
+        dbManager.run()
 
         val collectionManager = CollectionManager()
         logger.info("Коллекция успешно заполнена объектами из файла.")
@@ -85,11 +87,15 @@ object Main {
                 ShuffleCommand(collectionManager),
                 HistoryCommand(commandManager),
                 ExecuteScriptCommand(),
+                Register(dbManager),
+                Login(dbManager)
             ),
         )
         val requestHandler = RequestHandler(commandManager)
         val server = Server(port, requestHandler)
-        logger.info("Создан объект сервера.")
+        logger.info("----------------------------------------------")
+        logger.info("--------------- СЕРВЕР ЗАПУЩЕН ---------------")
+        logger.info("----------------------------------------------")
 
         server.run()
     }

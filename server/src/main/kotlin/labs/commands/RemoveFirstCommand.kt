@@ -21,9 +21,17 @@ class RemoveFirstCommand(private val collectionManager: CollectionManager) :
             return Response(ResponseStatus.WARNING, "Коллекция пуста!")
         }
 
-        val first = collectionManager.collection.first
-        collectionManager.collection.remove(first)
-        DatabaseConnector.databaseManager.deleteObjectById(first!!.id)
-        return Response(ResponseStatus.OK, "Первый элемент коллекции успешно удален!")
+        try {
+            val first = collectionManager
+                .collection.first { it!!.creatorLogin == request.user!!.login }
+            collectionManager.collection.remove(first)
+            DatabaseConnector.databaseManager.deleteObjectById(first!!.id, request.user!!)
+            return Response(ResponseStatus.OK, "Первый элемент коллекции успешно удален!")
+        } catch (e: NoSuchElementException) {
+            return Response(ResponseStatus.ERROR, "В коллекции нет Ваших элементов!")
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return Response(ResponseStatus.ERROR, "В коллекции нет Ваших элементов!")
+        }
     }
 }

@@ -55,9 +55,10 @@ class SQLCommands {
             );
             """.trimIndent()
 
-        val addUser =
+        val insertUser =
             """
-            INSERT INTO users(login, password, salt) VALUES (?, ?, ?);
+            INSERT INTO users(login, password, salt) VALUES (?, ?, ?)
+            RETURNING id;
             """.trimIndent()
 
         val getUser =
@@ -65,7 +66,7 @@ class SQLCommands {
             SELECT * FROM users WHERE (login = ?);
             """.trimIndent()
 
-        val addObject =
+        val insertObject =
             """
             INSERT INTO person(name, cord_x, cord_y, creation_date, height, eye_color, hair_color, nationality, location_x, location_y, location_name, creator_login)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)

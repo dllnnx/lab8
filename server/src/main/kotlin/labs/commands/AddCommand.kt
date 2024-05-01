@@ -25,9 +25,10 @@ class AddCommand(private val collectionManager: CollectionManager, private val c
             commandManager.removeLastCommand()
             return Response(ResponseStatus.OBJECT_REQUIRED, "Для команды $name требуется объект!")
         } else {
-            val newId = DatabaseConnector.databaseManager.addObject(request.person!!).toLong()
+            val newId = DatabaseConnector.databaseManager.insertObject(request.person!!, request.user!!).toLong()
             if (newId == -1L) return Response(ResponseStatus.ERROR, "Не удалось добавить объект в базу данных.")
             request.person!!.id = newId
+            request.person!!.creatorLogin = request.user!!.login
             collectionManager.addElement(request.person)
             return Response(ResponseStatus.OK, "Объект Person добавлен успешно!")
         }

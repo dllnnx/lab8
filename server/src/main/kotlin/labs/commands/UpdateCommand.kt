@@ -35,7 +35,7 @@ class UpdateCommand(private val collectionManager: CollectionManager) :
                 return Response(ResponseStatus.WARNING, "Нет элемента с таким id в коллекции!")
             }
 
-            if (DatabaseConnector.databaseManager.updateObject(id, request.person!!)) {
+            if (DatabaseConnector.databaseManager.updateObject(id, request.person!!, request.user!!)) {
                 collectionManager.updateById(request.person, id)
                 return Response(ResponseStatus.OK, "Элемент Person с id = $id обновлен успешно!")
             }

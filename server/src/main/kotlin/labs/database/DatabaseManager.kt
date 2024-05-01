@@ -2,6 +2,7 @@ package labs.database
 
 import com.jcraft.jsch.JSch
 import labs.Main
+import labs.dto.User
 import labs.objects.Coordinates
 import labs.objects.Country
 import labs.objects.EyeColor
@@ -26,6 +27,7 @@ class DatabaseManager {
     private val properties = Properties()
 
     private lateinit var connection: Connection
+    private val PEPPER = ""
 
     fun run() {
         connectToDb()
@@ -59,25 +61,25 @@ class DatabaseManager {
             logger.info("В базе данных созданы таблицы.")
         } catch (e: SQLException) {
             logger.debug(e)
-            logger.info("Неуспешная попытка создать таблицы в базе данных.")
+            logger.error("Неуспешная попытка создать таблицы в базе данных.")
         }
     }
 
-    fun addObject(person: Person): Int {
+    fun insertObject(person: Person, user: User): Int {
         try {
-            val ps = connection.prepareStatement(SQLCommands.addObject)
+            val ps = connection.prepareStatement(SQLCommands.insertObject)
             fillSqlRequest(ps, person)
-            ps.setString(12, "user1")
+            ps.setString(12, user.login)
             val resultSet = ps.executeQuery()
 
             if (!resultSet.next()) {
-                logger.info("Объект не добавлен в базу данных.")
+                logger.error("Объект не добавлен в базу данных.")
                 return -1
             }
             logger.info("Объект добавлен в базу данных.")
             return resultSet.getInt(1)
         } catch (e: SQLException) {
-            logger.info("Неуспешная попытка добавить объект в базу данных.")
+            logger.error("Неуспешная попытка добавить объект в базу данных.")
             logger.debug(e)
             return -1
         }
@@ -86,32 +88,33 @@ class DatabaseManager {
     fun updateObject(
         id: Long,
         person: Person,
+        user: User
     ): Boolean {
         try {
             val ps = connection.prepareStatement(SQLCommands.updateUserObject)
             fillSqlRequest(ps, person)
 
             ps.setLong(12, id)
-            ps.setString(13, "user1")
+            ps.setString(13, user.login)
             val resultSet = ps.executeQuery()
             return resultSet.next()
         } catch (e: SQLException) {
             logger.debug(e)
-            logger.info("Неуспешная попытка обновить объект.")
+            logger.error("Неуспешная попытка обновить объект.")
             return false
         }
     }
 
-    fun deleteObjectById(id: Long): Boolean {
+    fun deleteObjectById(id: Long, user: User): Boolean {
         try {
             val ps = connection.prepareStatement(SQLCommands.deleteUserCreatedObject)
-            ps.setString(1, "user1")
+            ps.setString(1, user.login)
             ps.setLong(2, id)
             val resultSet = ps.executeQuery()
             return resultSet.next()
         } catch (e: SQLException) {
             logger.debug(e)
-            logger.info("Неуспешная попытка удалить объект.")
+            logger.error("Неуспешная попытка удалить объект.")
             return false
         } catch (e: Exception) {
             e.printStackTrace()
@@ -119,19 +122,19 @@ class DatabaseManager {
         }
     }
 
-    fun deleteAllObjects(ids: List<Long>): Boolean {
+    fun deleteAllObjects(ids: List<Long>, user: User): Boolean {
         try {
             for (id in ids) {
                 val ps = connection.prepareStatement(SQLCommands.deleteUserCreatedObject)
-                ps.setString(1, "user1")
+                ps.setString(1, user.login)
                 ps.setLong(2, id)
                 ps.executeQuery()
             }
-            logger.info("Удалены все объекты, созданные user1.")
+            logger.info("Удалены все объекты, созданные ${user.login}.")
             return true
         } catch (e: SQLException) {
             logger.debug(e)
-            logger.info("Не удалось удалить все объекты, созданные user1.")
+            logger.error("Не удалось удалить все объекты, созданные ${user.login}.")
             return false
         }
     }
@@ -160,6 +163,7 @@ class DatabaseManager {
                             resultSet.getFloat("location_y"),
                             resultSet.getString("location_name"),
                         ),
+                        resultSet.getString("creator_login")
                     ),
                 )
             }
@@ -167,7 +171,7 @@ class DatabaseManager {
             return collection
         } catch (e: SQLException) {
             logger.debug(e)
-            logger.info("Не удалось загрузить коллекцию: коллекция пуста либо возникла ошибка при исполнении запроса.")
+            logger.error("Не удалось загрузить коллекцию: коллекция пуста либо возникла ошибка при исполнении запроса.")
             return LinkedList<Person?>()
         }
     }
@@ -188,5 +192,60 @@ class DatabaseManager {
         ps.setFloat(10, person.location.y)
         ps.setString(11, person.location.name)
         return ps
+    }
+
+    private fun checkUserExists (user: User): Boolean {
+        try {
+            val ps = connection.prepareStatement(SQLCommands.getUser)
+            ps.setString(1, user.login)
+            val resultSet = ps.executeQuery()
+            return resultSet.next()
+        } catch (e: SQLException) {
+            logger.debug(e)
+            logger.info("Ошибка при проверке существования пользователя в базе данных.")
+            return false
+        }
+    }
+
+    fun insertUser(user: User): Int {
+        try {
+            val exists = checkUserExists(user)
+            if (exists) {
+                logger.info("Неуспешная регистрация: пользователь с таким логином уже существует.")
+                return -1
+            }
+//        val salt =
+            val ps = connection.prepareStatement(SQLCommands.insertUser)
+            ps.setString(1, user.login)
+            ps.setString(2, user.password)
+            ps.setString(3, "salt")
+            val resultSet = ps.executeQuery()
+            if (!resultSet.next()) {
+                logger.error("Пользователь не добавлен в базу данных.")
+                return -1
+            }
+            logger.info("Пользователь добавлен в базу данных.")
+            return resultSet.getInt(1)
+        } catch (e: SQLException) {
+            logger.debug(e)
+            logger.error("Ошибка при добавлении пользователя в базу данных.")
+            return -1
+        }
+    }
+
+    fun checkAuthUser (user: User): Boolean {
+        try {
+            val ps = connection.prepareStatement(SQLCommands.getUser)
+            ps.setString(1, user.login)
+            val resultSet = ps.executeQuery()
+            if (!resultSet.next())
+                return false
+
+            return user.password == resultSet.getString(3)
+        } catch (e: SQLException) {
+            logger.debug(e)
+            logger.error("Ошибка при проверке существования пользователя!.")
+            return false
+        }
     }
 }

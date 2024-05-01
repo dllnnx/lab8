@@ -17,10 +17,10 @@ class Person(
     var eyeColor: EyeColor,
     var hairColor: HairColor,
     var nationality: Country,
-    var location: Location,
+    var location: Location
 ) : Comparable<Person?>, Serializable {
     var id: Long = 0
-    lateinit var userLogin: String
+    lateinit var creatorLogin: String
 
     constructor(
         id: Long,
@@ -32,8 +32,10 @@ class Person(
         hairColor: HairColor,
         nationality: Country,
         location: Location,
+        creatorLogin: String
     ) : this(name, coordinates, creationDate, height, eyeColor, hairColor, nationality, location) {
         this.id = id
+        this.creatorLogin = creatorLogin
     }
 
     override fun compareTo(other: Person?): Int {
@@ -41,7 +43,7 @@ class Person(
     }
 
     override fun toString(): String {
-        return "Person {\n" +
+        return "Person: \n" +
             "id = $id,\n" +
             "name = $name,\n" +
             "coordinates = $coordinates,\n" +
@@ -50,7 +52,7 @@ class Person(
             "eye_color = $eyeColor,\n" +
             "hair_color = $hairColor,\n" +
             "nationality = $nationality,\n" +
-            "location = $location\n" +
-            "}".trimIndent()
+            "location = $location,\n" +
+            "creator = $creatorLogin".trimIndent()
     }
 }

@@ -18,7 +18,7 @@ class HelpCommand(private val commandManager: CommandManager) :
         if (request.args.isNotEmpty()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды не требуются аргументы!")
         }
-        var str = commandManager.commands.values.joinToString("\n")
+        val str = commandManager.showUserCommands()
         return Response(ResponseStatus.OK, str)
     }
 }

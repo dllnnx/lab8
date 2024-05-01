@@ -36,7 +36,7 @@ class RemoveByIdCommand(private val collectionManager: CollectionManager) :
                 return Response(ResponseStatus.ERROR, "Нет элемента с таким id в коллекции!")
             }
 
-            if (DatabaseConnector.databaseManager.deleteObjectById(id)) {
+            if (DatabaseConnector.databaseManager.deleteObjectById(id, request.user!!)) {
                 collectionManager.removeById(id)
                 return Response(ResponseStatus.OK, "Удаление элемента с id = $id произошло успешно!")
             } else {

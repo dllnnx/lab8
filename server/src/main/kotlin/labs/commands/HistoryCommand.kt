@@ -3,6 +3,7 @@ package labs.commands
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
+import labs.dto.User
 import labs.utility.CommandManager
 
 /**
@@ -16,9 +17,11 @@ class HistoryCommand(private val commandManager: CommandManager) :
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды не требуются аргументы!")
         }
 
-        val history: List<String> = commandManager.commandHistory
+        val history: ArrayList<Pair<String, User>> = commandManager.commandHistory
         if (history.isNotEmpty()) {
-            val resp = history.joinToString("\n")
+            val resp = history
+                .filter { it.second == request.user!! }
+                .joinToString("\n") { it.first }
             return Response(ResponseStatus.OK, resp)
         } else {
             return Response(ResponseStatus.WARNING, "Вы еще не ввели ни одной команды! :(((")
