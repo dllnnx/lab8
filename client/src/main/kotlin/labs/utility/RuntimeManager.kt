@@ -99,6 +99,7 @@ class RuntimeManager(
                 val person = PersonForm(console).build()
                 if (!Validator().validatePerson(person)) {
                     console.printError("Поля не валидны! Объект не создан :((")
+                    return
                 }
 
                 val newResponse =

@@ -4,6 +4,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 server/src/main/resources/dbconfig.cfg
+script.txt
+script2.txt
 
 ### IntelliJ IDEA ###
 .idea

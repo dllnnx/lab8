@@ -11,6 +11,7 @@ import labs.objects.Location
 import labs.objects.Person
 import org.apache.logging.log4j.kotlin.logger
 import java.io.FileInputStream
+import java.security.MessageDigest
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.PreparedStatement
@@ -19,6 +20,8 @@ import java.sql.Types
 import java.time.ZoneId
 import java.util.LinkedList
 import java.util.Properties
+import kotlin.random.Random
+
 
 class DatabaseManager {
     private val logger = logger()
@@ -27,7 +30,12 @@ class DatabaseManager {
     private val properties = Properties()
 
     private lateinit var connection: Connection
-    private val PEPPER = ""
+    private var md: MessageDigest = MessageDigest.getInstance("SHA-512")
+    companion object {
+        const val PEPPER = ",[0z/q{$.b*"
+        const val SALT_CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
+            "!@#$%^&*()_+<>?:;{}[]"
+    }
 
     fun run() {
         connectToDb()
@@ -214,11 +222,14 @@ class DatabaseManager {
                 logger.info("Неуспешная регистрация: пользователь с таким логином уже существует.")
                 return -1
             }
-//        val salt =
+
+            val salt = generateSalt()
+            val password = hasWith512SHA(PEPPER + user.password + salt)
+
             val ps = connection.prepareStatement(SQLCommands.insertUser)
             ps.setString(1, user.login)
-            ps.setString(2, user.password)
-            ps.setString(3, "salt")
+            ps.setString(2, password)
+            ps.setString(3, salt)
             val resultSet = ps.executeQuery()
             if (!resultSet.next()) {
                 logger.error("Пользователь не добавлен в базу данных.")
@@ -241,11 +252,34 @@ class DatabaseManager {
             if (!resultSet.next())
                 return false
 
-            return user.password == resultSet.getString(3)
+            val salt = resultSet.getString("salt")
+            val chechingPass = hasWith512SHA(PEPPER + user.password + salt)
+
+            return resultSet.getString("password") == chechingPass
         } catch (e: SQLException) {
             logger.debug(e)
             logger.error("Ошибка при проверке существования пользователя!.")
             return false
         }
     }
+
+    private fun generateSalt(): String {
+        val rnd = Random
+        var salt = ""
+        for (i in 0..7) {
+            salt += SALT_CHARACTERS[rnd.nextInt(SALT_CHARACTERS.length)]
+        }
+        return salt
+    }
+
+    private fun hasWith512SHA (string: String): String {
+        md.update(string.toByteArray())
+        val hashBytes = md.digest()
+        var hashedString = ""
+        for (byte in hashBytes) {
+            hashedString += (String.format("%02x", byte))
+        }
+        return hashedString
+    }
+
 }

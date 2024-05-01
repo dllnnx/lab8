@@ -5,6 +5,7 @@ import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
 import labs.dto.User
+import kotlin.math.max
 
 class CommandManager {
     var commands = HashMap<String, Command>()
@@ -38,5 +39,15 @@ class CommandManager {
             .filter { it.key != "login" && it.key != "register" }
             .values
             .joinToString ( "\n" )
+    }
+
+    fun showHistory(user: User): String {
+        val userHistory = commandHistory
+            .filter { it.second == user }
+            .map { it.first }
+        val resp = userHistory
+            .subList(max(0, userHistory.size - maxCommandHistorySize), userHistory.size)
+            .joinToString("\n")
+        return resp
     }
 }

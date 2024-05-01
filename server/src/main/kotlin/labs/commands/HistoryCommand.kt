@@ -19,9 +19,7 @@ class HistoryCommand(private val commandManager: CommandManager) :
 
         val history: ArrayList<Pair<String, User>> = commandManager.commandHistory
         if (history.isNotEmpty()) {
-            val resp = history
-                .filter { it.second == request.user!! }
-                .joinToString("\n") { it.first }
+            val resp = commandManager.showHistory(request.user!!)
             return Response(ResponseStatus.OK, resp)
         } else {
             return Response(ResponseStatus.WARNING, "Вы еще не ввели ни одной команды! :(((")
