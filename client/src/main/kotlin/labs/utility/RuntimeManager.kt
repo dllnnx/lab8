@@ -34,23 +34,27 @@ class RuntimeManager(
             var isLogin = true
             do {
                 if (!Objects.isNull(response)) {
-                    if (isLogin) console.printError("Пользователь не найден, проверьте логин и пароль!")
-                    else console.printError("Этот логин уже занят, попробуйте снова!")
+                    if (isLogin) {
+                        console.printError("Пользователь не найден, проверьте логин и пароль!")
+                    } else {
+                        console.printError("Этот логин уже занят, попробуйте снова!")
+                    }
                 }
 
                 isLogin = UserForm(console).askIfLogin()
                 user = UserForm(console).build()
 
-                response = if (isLogin)
-                    client.sendAndReceiveResponse(Request("login", "", user!!))
-                else
-                    client.sendAndReceiveResponse(Request("register", "", user!!))
+                response =
+                    if (isLogin) {
+                        client.sendAndReceiveResponse(Request("login", "", user!!))
+                    } else {
+                        client.sendAndReceiveResponse(Request("register", "", user!!))
+                    }
             } while (response!!.status != ResponseStatus.OK)
             console.println(ConsoleColor.setConsoleColor("----------------------------------------------", ConsoleColor.GREEN))
             console.println(ConsoleColor.setConsoleColor("---------- Вход в аккаунт выполнен! ----------", ConsoleColor.GREEN))
             console.println(ConsoleColor.setConsoleColor("----------------------------------------------", ConsoleColor.GREEN))
         }
-
 
         console.println("Чтобы увидеть список допустимых команд, введите help")
         while (true) {
@@ -108,7 +112,7 @@ class RuntimeManager(
                             userCommand[0].trim(),
                             userCommand[1].trim(),
                             person,
-                            user!!
+                            user!!,
                         ),
                     )
 

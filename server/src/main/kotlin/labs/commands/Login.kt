@@ -6,8 +6,9 @@ import labs.dto.Response
 import labs.dto.ResponseStatus
 import org.apache.logging.log4j.kotlin.logger
 
-class Login(private val databaseManager: DatabaseManager): Command("login", ": войти в аккаунт") {
+class Login(private val databaseManager: DatabaseManager) : Command("login", ": войти в аккаунт") {
     private val logger = logger()
+
     override fun execute(request: Request): Response {
         logger.info("Вход в аккаунт пользователя с логином ${request.user!!.login}.")
         if (databaseManager.checkAuthUser(request.user!!)) {

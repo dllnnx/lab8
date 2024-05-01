@@ -18,8 +18,10 @@ class Response(var status: ResponseStatus) : Serializable {
     }
 
     override fun toString(): String {
-        return if (Objects.isNull(collection))
+        return if (Objects.isNull(collection)) {
             "Response (Status: ${this.status}, message = ${this.message})"
-        else "Response (Status: ${this.status}, message = ${this.message}, collection = ${this.collection})"
+        } else {
+            "Response (Status: ${this.status}, message = ${this.message}, collection = ${this.collection})"
+        }
     }
 }

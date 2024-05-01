@@ -16,14 +16,18 @@ class UpdateCommand(private val collectionManager: CollectionManager) :
     override fun execute(request: Request): Response {
         try {
             if (request.args.trim().split(" ").size != 1 || request.args.trim().isEmpty()) {
-                return if (request.args.trim().isEmpty())
+                return if (request.args.trim().isEmpty()) {
                     Response(
-                    ResponseStatus.WRONG_ARGUMENTS,
-                    "Для этой команды требуется аргумент!"
-                ) else Response(
-                    ResponseStatus.WRONG_ARGUMENTS,
-                    "Неверное количество аргументов! " +
-                        "Введено: " + request.args.trim().split(" ").size + ", ожидалось: 1.")
+                        ResponseStatus.WRONG_ARGUMENTS,
+                        "Для этой команды требуется аргумент!",
+                    )
+                } else {
+                    Response(
+                        ResponseStatus.WRONG_ARGUMENTS,
+                        "Неверное количество аргументов! " +
+                            "Введено: " + request.args.trim().split(" ").size + ", ожидалось: 1.",
+                    )
+                }
             }
             if (collectionManager.getCollectionSize() == 0) {
                 return Response(ResponseStatus.WARNING, "Коллекция пуста!")
@@ -35,8 +39,9 @@ class UpdateCommand(private val collectionManager: CollectionManager) :
                 return Response(ResponseStatus.WARNING, "Нет элемента с таким id в коллекции!")
             }
 
-            if (collectionManager.getById(id)!!.creatorLogin != request.user!!.login)
+            if (collectionManager.getById(id)!!.creatorLogin != request.user!!.login) {
                 return Response(ResponseStatus.ERROR, "Вы не можете обновить этот элемент, так как он был создан не Вами!")
+            }
             if (Objects.isNull(request.person)) {
                 return Response(ResponseStatus.OBJECT_REQUIRED, "Для команды update требуется объект!")
             }

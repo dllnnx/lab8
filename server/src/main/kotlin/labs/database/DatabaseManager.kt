@@ -22,7 +22,6 @@ import java.util.LinkedList
 import java.util.Properties
 import kotlin.random.Random
 
-
 class DatabaseManager {
     private val logger = logger()
     private val jsch = JSch()
@@ -31,10 +30,12 @@ class DatabaseManager {
 
     private lateinit var connection: Connection
     private var md: MessageDigest = MessageDigest.getInstance("SHA-512")
+
     companion object {
         const val PEPPER = ",[0z/q{$.b*"
-        const val SALT_CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
-            "!@#$%^&*()_+<>?:;{}[]"
+        const val SALT_CHARACTERS =
+            "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
+                "!@#$%^&*()_+<>?:;{}[]"
     }
 
     fun run() {
@@ -73,7 +74,10 @@ class DatabaseManager {
         }
     }
 
-    fun insertObject(person: Person, user: User): Int {
+    fun insertObject(
+        person: Person,
+        user: User,
+    ): Int {
         try {
             val ps = connection.prepareStatement(SQLCommands.insertObject)
             fillSqlRequest(ps, person)
@@ -96,7 +100,7 @@ class DatabaseManager {
     fun updateObject(
         id: Long,
         person: Person,
-        user: User
+        user: User,
     ): Boolean {
         try {
             val ps = connection.prepareStatement(SQLCommands.updateUserObject)
@@ -113,7 +117,10 @@ class DatabaseManager {
         }
     }
 
-    fun deleteObjectById(id: Long, user: User): Boolean {
+    fun deleteObjectById(
+        id: Long,
+        user: User,
+    ): Boolean {
         try {
             val ps = connection.prepareStatement(SQLCommands.deleteUserCreatedObject)
             ps.setString(1, user.login)
@@ -130,7 +137,10 @@ class DatabaseManager {
         }
     }
 
-    fun deleteAllObjects(ids: List<Long>, user: User): Boolean {
+    fun deleteAllObjects(
+        ids: List<Long>,
+        user: User,
+    ): Boolean {
         try {
             for (id in ids) {
                 val ps = connection.prepareStatement(SQLCommands.deleteUserCreatedObject)
@@ -171,7 +181,7 @@ class DatabaseManager {
                             resultSet.getFloat("location_y"),
                             resultSet.getString("location_name"),
                         ),
-                        resultSet.getString("creator_login")
+                        resultSet.getString("creator_login"),
                     ),
                 )
             }
@@ -202,7 +212,7 @@ class DatabaseManager {
         return ps
     }
 
-    private fun checkUserExists (user: User): Boolean {
+    private fun checkUserExists(user: User): Boolean {
         try {
             val ps = connection.prepareStatement(SQLCommands.getUser)
             ps.setString(1, user.login)
@@ -244,13 +254,14 @@ class DatabaseManager {
         }
     }
 
-    fun checkAuthUser (user: User): Boolean {
+    fun checkAuthUser(user: User): Boolean {
         try {
             val ps = connection.prepareStatement(SQLCommands.getUser)
             ps.setString(1, user.login)
             val resultSet = ps.executeQuery()
-            if (!resultSet.next())
+            if (!resultSet.next()) {
                 return false
+            }
 
             val salt = resultSet.getString("salt")
             val chechingPass = hasWith512SHA(PEPPER + user.password + salt)
@@ -272,7 +283,7 @@ class DatabaseManager {
         return salt
     }
 
-    private fun hasWith512SHA (string: String): String {
+    private fun hasWith512SHA(string: String): String {
         md.update(string.toByteArray())
         val hashBytes = md.digest()
         var hashedString = ""
@@ -281,5 +292,4 @@ class DatabaseManager {
         }
         return hashedString
     }
-
 }

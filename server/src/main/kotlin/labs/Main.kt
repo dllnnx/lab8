@@ -88,7 +88,7 @@ object Main {
                 HistoryCommand(commandManager),
                 ExecuteScriptCommand(),
                 Register(dbManager),
-                Login(dbManager)
+                Login(dbManager),
             ),
         )
         val requestHandler = RequestHandler(commandManager)

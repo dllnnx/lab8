@@ -20,11 +20,12 @@ class ClearCommand(private val collectionManager: CollectionManager) :
             return Response(ResponseStatus.WARNING, "Коллекция уже пуста!")
         }
 
-        val ids = collectionManager
-            .collection
-            .filter { it!!.creatorLogin == request.user!!.login }
-            .map { it!!.id }
-            .toList()
+        val ids =
+            collectionManager
+                .collection
+                .filter { it!!.creatorLogin == request.user!!.login }
+                .map { it!!.id }
+                .toList()
         if (DatabaseConnector.databaseManager.deleteAllObjects(ids, request.user!!)) {
             collectionManager.removeElements(ids)
             return Response(ResponseStatus.OK, "Ваши элементы успешно удалены.")

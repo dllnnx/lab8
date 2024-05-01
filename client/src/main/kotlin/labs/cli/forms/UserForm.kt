@@ -10,7 +10,7 @@ import labs.utility.Printable
 import labs.utility.ScriptManager
 import java.util.Objects
 
-class UserForm (console: Printable): Form<User>(console) {
+class UserForm(console: Printable) : Form<User>(console) {
     private val console: Printable = if (Console.fileMode) FileConsole() else console
     private val scanner: UserInput = if (Console.fileMode) ScriptManager() else ConsoleInput()
 
@@ -38,8 +38,9 @@ class UserForm (console: Printable): Form<User>(console) {
             if (login.isEmpty()) {
                 console.printError("Логин не может быть пустым!")
 //                if (Console.fileMode)
+            } else {
+                return login
             }
-            else return login
         }
     }
 
@@ -47,14 +48,18 @@ class UserForm (console: Printable): Form<User>(console) {
         var password: String
         while (true) {
             console.println(ConsoleColor.setConsoleColor("Введите пароль: ", ConsoleColor.CYAN))
-            password = if (Objects.isNull(System.console())) scanner.nextLine()!!.trim()
-                        else String(System.console().readPassword())
+            password =
+                if (Objects.isNull(System.console())) {
+                    scanner.nextLine()!!.trim()
+                } else {
+                    String(System.console().readPassword())
+                }
             if (password.isEmpty()) {
                 console.printError("Логин не может быть пустым!")
 //                if (Console.fileMode)
+            } else {
+                return password
             }
-            else return password
         }
     }
-
 }

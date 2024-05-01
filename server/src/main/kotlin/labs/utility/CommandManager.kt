@@ -20,13 +20,17 @@ class CommandManager {
         val command: Command =
             commands[request.commandName]
                 ?: return Response(ResponseStatus.ERROR, "Такой команды нет в списке!((")
-        if (request.commandName != "login" && request.commandName != "register")
+        if (request.commandName != "login" && request.commandName != "register") {
             addToHistory(request.commandName, request.user!!)
+        }
         val response: Response = command.execute(request)
         return response
     }
 
-    private fun addToHistory(command: String, user: User) {
+    private fun addToHistory(
+        command: String,
+        user: User,
+    ) {
         commandHistory.add(Pair(command, user))
     }
 
@@ -38,16 +42,18 @@ class CommandManager {
         return commands
             .filter { it.key != "login" && it.key != "register" }
             .values
-            .joinToString ( "\n" )
+            .joinToString("\n")
     }
 
     fun showHistory(user: User): String {
-        val userHistory = commandHistory
-            .filter { it.second == user }
-            .map { it.first }
-        val resp = userHistory
-            .subList(max(0, userHistory.size - maxCommandHistorySize), userHistory.size)
-            .joinToString("\n")
+        val userHistory =
+            commandHistory
+                .filter { it.second == user }
+                .map { it.first }
+        val resp =
+            userHistory
+                .subList(max(0, userHistory.size - maxCommandHistorySize), userHistory.size)
+                .joinToString("\n")
         return resp
     }
 }

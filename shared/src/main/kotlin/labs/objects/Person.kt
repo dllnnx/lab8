@@ -17,7 +17,7 @@ class Person(
     var eyeColor: EyeColor,
     var hairColor: HairColor,
     var nationality: Country,
-    var location: Location
+    var location: Location,
 ) : Comparable<Person?>, Serializable {
     var id: Long = 0
     lateinit var creatorLogin: String
@@ -32,7 +32,7 @@ class Person(
         hairColor: HairColor,
         nationality: Country,
         location: Location,
-        creatorLogin: String
+        creatorLogin: String,
     ) : this(name, coordinates, creationDate, height, eyeColor, hairColor, nationality, location) {
         this.id = id
         this.creatorLogin = creatorLogin
