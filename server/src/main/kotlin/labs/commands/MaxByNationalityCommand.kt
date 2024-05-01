@@ -14,7 +14,7 @@ class MaxByNationalityCommand(private val collectionManager: CollectionManager) 
         "max_by_nationality",
         ": вывести любой объект из коллекции, значение поля nationality которого является максимальным.",
     ) {
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         if (request.args.isNotEmpty()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды не требуются аргументы!")
         }

@@ -13,7 +13,7 @@ import java.util.Objects
  */
 class UpdateCommand(private val collectionManager: CollectionManager) :
     Command("update", " id: обновить значение элемента коллекции, id которого равен заданному.") {
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         try {
             if (request.args.trim().split(" ").size != 1 || request.args.trim().isEmpty()) {
                 return if (request.args.trim().isEmpty()) {

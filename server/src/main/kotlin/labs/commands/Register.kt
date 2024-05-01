@@ -9,7 +9,7 @@ import org.apache.logging.log4j.kotlin.logger
 class Register(private val databaseManager: DatabaseManager) : Command("register", ": зарегистрироваться") {
     private val logger = logger()
 
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         logger.info("Регистрация пользователя с логином: ${request.user!!.login}")
         val ins = databaseManager.insertUser(request.user!!)
         if (ins == -1) {

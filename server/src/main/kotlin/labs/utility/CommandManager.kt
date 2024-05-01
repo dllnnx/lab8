@@ -16,7 +16,7 @@ class CommandManager {
         this.commands.putAll(commands.associateBy { it.name })
     }
 
-    fun execute(request: Request): Response {
+    suspend fun execute(request: Request): Response {
         val command: Command =
             commands[request.commandName]
                 ?: return Response(ResponseStatus.ERROR, "Такой команды нет в списке!((")

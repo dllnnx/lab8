@@ -14,7 +14,7 @@ class ShowCommand(private val collectionManager: CollectionManager) :
     /**
      * Выполнить команду
      */
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         if (request.args.isEmpty()) {
             val collection = collectionManager.collection
             if (collection.isEmpty()) {

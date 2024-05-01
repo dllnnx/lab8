@@ -14,7 +14,7 @@ import java.util.Objects
  */
 class AddCommand(private val collectionManager: CollectionManager, private val commandManager: CommandManager) :
     Command("add", " {element}: добавить новый элемент в коллекцию.") {
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         if (request.args.isNotBlank()) {
             return Response(
                 ResponseStatus.WRONG_ARGUMENTS,

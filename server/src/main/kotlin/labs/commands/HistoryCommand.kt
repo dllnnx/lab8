@@ -12,7 +12,7 @@ import labs.utility.CommandManager
  */
 class HistoryCommand(private val commandManager: CommandManager) :
     Command("history", ":  вывести последние 10 команд (без их аргументов).") {
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         if (request.args.isNotEmpty()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды не требуются аргументы!")
         }

@@ -12,7 +12,7 @@ import labs.utility.CollectionManager
  */
 class RemoveFirstCommand(private val collectionManager: CollectionManager) :
     Command("remove_first", ": удалить первый элемент из коллекции.") {
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         if (request.args.isNotBlank()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды не требуются аргументы!")
         }

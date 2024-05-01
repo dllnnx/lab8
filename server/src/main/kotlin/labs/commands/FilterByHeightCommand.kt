@@ -11,7 +11,7 @@ import labs.utility.CollectionManager
  */
 class FilterByHeightCommand(private val collectionManager: CollectionManager) :
     Command("filter_by_height", " height: вывести элементы, значение поля height которых равно заданному.") {
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         if (request.args.isBlank()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды требуется аргумент!")
         }

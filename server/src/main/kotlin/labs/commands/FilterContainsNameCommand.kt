@@ -14,7 +14,7 @@ class FilterContainsNameCommand(private val collectionManager: CollectionManager
         "filter_contains_name",
         " name: вывести элементы, значение поля name которых содержит заданную подстроку.",
     ) {
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         if (request.args.split(" ").size != 1 || request.args.isBlank()) {
             return Response(
                 ResponseStatus.WRONG_ARGUMENTS,
