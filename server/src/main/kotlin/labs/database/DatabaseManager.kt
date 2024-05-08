@@ -264,9 +264,9 @@ class DatabaseManager {
             }
 
             val salt = resultSet.getString("salt")
-            val chechingPass = hasWith512SHA(PEPPER + user.password + salt)
+            val checkingPass = hasWith512SHA(PEPPER + user.password + salt)
 
-            return resultSet.getString("password") == chechingPass
+            return resultSet.getString("password") == checkingPass
         } catch (e: SQLException) {
             logger.debug(e)
             logger.error("Ошибка при проверке существования пользователя!.")
