@@ -102,18 +102,18 @@ class DatabaseManager {
         person: Person,
         user: User,
     ): Boolean {
-        try {
+        return try {
             val ps = connection.prepareStatement(SQLCommands.updateUserObject)
             fillSqlRequest(ps, person)
 
             ps.setLong(12, id)
             ps.setString(13, user.login)
             val resultSet = ps.executeQuery()
-            return resultSet.next()
+            resultSet.next()
         } catch (e: SQLException) {
             logger.debug(e)
             logger.error("Неуспешная попытка обновить объект.")
-            return false
+            false
         }
     }
 
@@ -121,19 +121,19 @@ class DatabaseManager {
         id: Long,
         user: User,
     ): Boolean {
-        try {
+        return try {
             val ps = connection.prepareStatement(SQLCommands.deleteUserCreatedObject)
             ps.setString(1, user.login)
             ps.setLong(2, id)
             val resultSet = ps.executeQuery()
-            return resultSet.next()
+            resultSet.next()
         } catch (e: SQLException) {
             logger.debug(e)
             logger.error("Неуспешная попытка удалить объект.")
-            return false
+            false
         } catch (e: Exception) {
             e.printStackTrace()
-            return false
+            false
         }
     }
 
@@ -141,7 +141,7 @@ class DatabaseManager {
         ids: List<Long>,
         user: User,
     ): Boolean {
-        try {
+        return try {
             for (id in ids) {
                 val ps = connection.prepareStatement(SQLCommands.deleteUserCreatedObject)
                 ps.setString(1, user.login)
@@ -149,11 +149,11 @@ class DatabaseManager {
                 ps.executeQuery()
             }
             logger.info("Удалены все объекты, созданные ${user.login}.")
-            return true
+            true
         } catch (e: SQLException) {
             logger.debug(e)
             logger.error("Не удалось удалить все объекты, созданные ${user.login}.")
-            return false
+            false
         }
     }
 
@@ -213,15 +213,15 @@ class DatabaseManager {
     }
 
     private fun checkUserExists(user: User): Boolean {
-        try {
+        return try {
             val ps = connection.prepareStatement(SQLCommands.getUser)
             ps.setString(1, user.login)
             val resultSet = ps.executeQuery()
-            return resultSet.next()
+            resultSet.next()
         } catch (e: SQLException) {
             logger.debug(e)
             logger.info("Ошибка при проверке существования пользователя в базе данных.")
-            return false
+            false
         }
     }
 
