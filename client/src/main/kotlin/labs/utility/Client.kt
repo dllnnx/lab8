@@ -27,11 +27,13 @@ class Client(
     }
 
     private fun disconnectFromServer() {
-        socket!!.close()
-        serverWriter!!.close()
-        serverReader!!.close()
-        serverWriter = null
-        serverReader = null
+        if (!Objects.isNull(socket)) {
+            socket!!.close()
+            serverWriter!!.close()
+            serverReader!!.close()
+            serverWriter = null
+            serverReader = null
+        }
     }
 
     fun sendAndReceiveResponse(request: Request): Response {
