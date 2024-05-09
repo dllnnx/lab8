@@ -32,6 +32,12 @@ class SQLCommands {
             EXCEPTION
                 WHEN duplicate_object THEN NULL;
             END $$;
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                login TEXT,
+                password TEXT,
+                salt TEXT
+            );
             CREATE TABLE IF NOT EXISTS person(
                 id SERIAL PRIMARY KEY,
                 name TEXT NOT NULL,
@@ -45,13 +51,7 @@ class SQLCommands {
                 location_x NUMERIC NOT NULL,
                 location_y NUMERIC NOT NULL,
                 location_name TEXT,
-                creator_login TEXT
-            );
-            CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY,
-                login TEXT,
-                password TEXT,
-                salt TEXT
+                creator_login TEXT REFERENCES users(login)
             );
             """.trimIndent()
 
