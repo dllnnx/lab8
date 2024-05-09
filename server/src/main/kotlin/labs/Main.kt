@@ -17,7 +17,6 @@ import labs.commands.RemoveFirstCommand
 import labs.commands.ShowCommand
 import labs.commands.ShuffleCommand
 import labs.commands.UpdateCommand
-import labs.database.DatabaseConnector
 import labs.utility.CollectionManager
 import labs.utility.CommandManager
 import labs.utility.Console
@@ -63,8 +62,6 @@ object Main {
 
         System.setProperty("file_path", File("data.json").absolutePath)
         Class.forName("org.postgresql.Driver")
-        val dbManager = DatabaseConnector.databaseManager
-        dbManager.run()
 
         val collectionManager = CollectionManager()
         logger.info("Коллекция успешно заполнена объектами из файла.")
@@ -87,8 +84,8 @@ object Main {
                 ShuffleCommand(collectionManager),
                 HistoryCommand(commandManager),
                 ExecuteScriptCommand(),
-                Register(dbManager),
-                Login(dbManager),
+                Register(),
+                Login(),
             ),
         )
         val requestHandler = RequestHandler(commandManager)

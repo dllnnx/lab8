@@ -110,7 +110,7 @@ class RuntimeManager(
                             userCommand[0].trim(),
                             userCommand[1].trim(),
                             person,
-                            user
+                            user,
                         ),
                     )
 

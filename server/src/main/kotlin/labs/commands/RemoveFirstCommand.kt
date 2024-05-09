@@ -24,9 +24,9 @@ class RemoveFirstCommand(private val collectionManager: CollectionManager) :
         try {
             val first =
                 collectionManager
-                    .collection.first { it!!.creatorLogin == request.user!!.login }
+                    .collection.first { it!!.creatorLogin == request.user.login }
             collectionManager.collection.remove(first)
-            DatabaseConnector.databaseManager.deleteObjectById(first!!.id, request.user!!)
+            DatabaseConnector.personDatabase.deleteObjectById(first!!.id, request.user)
             return Response(ResponseStatus.OK, "Ваш первый элемент коллекции успешно удален!")
         } catch (e: NoSuchElementException) {
             return Response(ResponseStatus.ERROR, "В коллекции нет Ваших элементов!")

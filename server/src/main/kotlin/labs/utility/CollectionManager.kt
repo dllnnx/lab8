@@ -17,7 +17,7 @@ class CollectionManager {
     private val mutex = Mutex()
 
     init {
-        collection.addAll(DatabaseConnector.databaseManager.fillCollection())
+        collection.addAll(DatabaseConnector.personDatabase.fillCollection())
     }
 
     suspend fun getCollectionType(): String {
@@ -43,16 +43,14 @@ class CollectionManager {
         id: Long,
     ) {
         mutex.withLock {
-            removeById(id)
+            collection.remove(getById(id))
             person?.id = id
             collection.add(person)
         }
     }
 
-    suspend fun getById(id: Long): Person? {
-        mutex.withLock {
-            return collection.filter { it!!.id == id }.getOrElse(0) { null }
-        }
+    fun getById(id: Long): Person? {
+        return collection.filter { it!!.id == id }.getOrElse(0) { null }
     }
 
     suspend fun checkExistById(id: Long): Boolean {
@@ -74,7 +72,7 @@ class CollectionManager {
 
     suspend fun removeElements(ids: List<Long>) {
         mutex.withLock {
-            ids.forEach { it -> collection.remove(this.getById(it)) }
+            ids.forEach { collection.remove(this.getById(it)) }
         }
     }
 

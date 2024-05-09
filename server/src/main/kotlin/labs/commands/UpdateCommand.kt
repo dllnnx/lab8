@@ -39,15 +39,15 @@ class UpdateCommand(private val collectionManager: CollectionManager) :
                 return Response(ResponseStatus.WARNING, "Нет элемента с таким id в коллекции!")
             }
 
-            if (collectionManager.getById(id)!!.creatorLogin != request.user!!.login) {
+            if (collectionManager.getById(id)!!.creatorLogin != request.user.login) {
                 return Response(ResponseStatus.ERROR, "Вы не можете обновить этот элемент, так как он был создан не Вами!")
             }
             if (Objects.isNull(request.person)) {
                 return Response(ResponseStatus.OBJECT_REQUIRED, "Для команды update требуется объект!")
             }
 
-            if (DatabaseConnector.databaseManager.updateObject(id, request.person!!, request.user!!)) {
-                request.person!!.creatorLogin = request.user!!.login
+            if (DatabaseConnector.personDatabase.updateObject(id, request.person!!, request.user)) {
+                request.person!!.creatorLogin = request.user.login
                 collectionManager.updateById(request.person, id)
                 return Response(ResponseStatus.OK, "Элемент Person с id = $id обновлен успешно!")
             }

@@ -23,11 +23,11 @@ class ClearCommand(private val collectionManager: CollectionManager) :
         val ids =
             collectionManager
                 .collection
-                .filter { it!!.creatorLogin == request.user!!.login }
+                .filter { it!!.creatorLogin == request.user.login }
                 .map { it!!.id }
                 .toList()
         if (ids.isEmpty()) return Response(ResponseStatus.WARNING, "В коллекции нет Ваших элементов!")
-        if (DatabaseConnector.databaseManager.deleteAllObjects(ids, request.user!!)) {
+        if (DatabaseConnector.personDatabase.deleteAllObjects(ids, request.user)) {
             collectionManager.removeElements(ids)
             return Response(ResponseStatus.OK, "Ваши элементы успешно удалены.")
         }
