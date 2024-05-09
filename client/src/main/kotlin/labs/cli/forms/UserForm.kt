@@ -37,7 +37,6 @@ class UserForm(console: Printable) : Form<User>(console) {
             login = scanner.nextLine()!!.trim().lowercase()
             if (login.isEmpty()) {
                 console.printError("Логин не может быть пустым!")
-//                if (Console.fileMode)
             } else {
                 return login
             }
@@ -55,8 +54,7 @@ class UserForm(console: Printable) : Form<User>(console) {
                     String(System.console().readPassword())
                 }
             if (password.isEmpty()) {
-                console.printError("Логин не может быть пустым!")
-//                if (Console.fileMode)
+                console.printError("Пароль не может быть пустым!")
             } else {
                 return password
             }

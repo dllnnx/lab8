@@ -26,35 +26,33 @@ class RuntimeManager(
     /**
      * Запускает работу программы в интерактивном режиме (в стандартной консоли).
      */
-    private var user: User? = null
+    private lateinit var user: User
 
     fun interactiveMode() {
-        if (Objects.isNull(user)) {
-            var response: Response? = null
-            var isLogin = true
-            do {
-                if (!Objects.isNull(response)) {
-                    if (isLogin) {
-                        console.printError("Пользователь не найден, проверьте логин и пароль!")
-                    } else {
-                        console.printError("Этот логин уже занят, попробуйте снова!")
-                    }
+        var response: Response? = null
+        var isLogin = true
+        do {
+            if (!Objects.isNull(response)) {
+                if (isLogin) {
+                    console.printError("Пользователь не найден, проверьте логин и пароль!")
+                } else {
+                    console.printError("Этот логин уже занят, попробуйте снова!")
                 }
+            }
 
-                isLogin = UserForm(console).askIfLogin()
-                user = UserForm(console).build()
+            isLogin = UserForm(console).askIfLogin()
+            user = UserForm(console).build()
 
-                response =
-                    if (isLogin) {
-                        client.sendAndReceiveResponse(Request("login", "", user!!))
-                    } else {
-                        client.sendAndReceiveResponse(Request("register", "", user!!))
-                    }
-            } while (response!!.status != ResponseStatus.OK)
-            console.println(ConsoleColor.setConsoleColor("----------------------------------------------", ConsoleColor.GREEN))
-            console.println(ConsoleColor.setConsoleColor("---------- Вход в аккаунт выполнен! ----------", ConsoleColor.GREEN))
-            console.println(ConsoleColor.setConsoleColor("----------------------------------------------", ConsoleColor.GREEN))
-        }
+            response =
+                if (isLogin) {
+                    client.sendAndReceiveResponse(Request("login", "", user))
+                } else {
+                    client.sendAndReceiveResponse(Request("register", "", user))
+                }
+        } while (response!!.status != ResponseStatus.OK)
+        console.println(ConsoleColor.setConsoleColor("----------------------------------------------", ConsoleColor.GREEN))
+        console.println(ConsoleColor.setConsoleColor("---------- Вход в аккаунт выполнен! ----------", ConsoleColor.GREEN))
+        console.println(ConsoleColor.setConsoleColor("----------------------------------------------", ConsoleColor.GREEN))
 
         console.println("Чтобы увидеть список допустимых команд, введите help")
         while (true) {
@@ -65,7 +63,7 @@ class RuntimeManager(
                     return
                 }
                 val userCommand = (userScanner.nextLine().trim() + " ").split(" ", limit = 2)
-                val response = client.sendAndReceiveResponse(Request(userCommand[0].trim(), userCommand[1].trim(), user!!))
+                response = client.sendAndReceiveResponse(Request(userCommand[0].trim(), userCommand[1].trim(), user))
                 reactToResponse(response, userCommand)
             } catch (e: NoSuchElementException) {
                 console.printError("Пользовательский ввод не обнаружен! :(")
@@ -112,7 +110,7 @@ class RuntimeManager(
                             userCommand[0].trim(),
                             userCommand[1].trim(),
                             person,
-                            user!!,
+                            user
                         ),
                     )
 
@@ -169,7 +167,7 @@ class RuntimeManager(
                         ConsoleColor.CYAN,
                     ),
                 )
-                val response = client.sendAndReceiveResponse(Request(command[0].trim(), command[1].trim(), user!!))
+                val response = client.sendAndReceiveResponse(Request(command[0].trim(), command[1].trim(), user))
                 if ((command[0] == "execute_script")) {
                     Console.fileMode = true
                 }

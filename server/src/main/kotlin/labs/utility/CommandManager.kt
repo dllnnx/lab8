@@ -21,7 +21,7 @@ class CommandManager {
             commands[request.commandName]
                 ?: return Response(ResponseStatus.ERROR, "Такой команды нет в списке!((")
         if (request.commandName != "login" && request.commandName != "register") {
-            addToHistory(request.commandName, request.user!!)
+            addToHistory(request.commandName, request.user)
         }
         val response: Response = command.execute(request)
         return response
@@ -41,8 +41,12 @@ class CommandManager {
     fun showUserCommands(): String {
         return commands
             .filter { it.key != "login" && it.key != "register" }
-            .values
-            .joinToString("\n")
+            .values.joinToString("\n") {
+                ConsoleColor.setConsoleColor(
+                    it.name,
+                    ConsoleColor.CYAN,
+                ) + it.description
+            }
     }
 
     fun showHistory(user: User): String {
