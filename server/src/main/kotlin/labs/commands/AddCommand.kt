@@ -1,5 +1,6 @@
 package labs.commands
 
+import labs.database.DatabaseConnector
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
@@ -13,7 +14,7 @@ import java.util.Objects
  */
 class AddCommand(private val collectionManager: CollectionManager, private val commandManager: CommandManager) :
     Command("add", " {element}: добавить новый элемент в коллекцию.") {
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         if (request.args.isNotBlank()) {
             return Response(
                 ResponseStatus.WRONG_ARGUMENTS,
@@ -24,7 +25,10 @@ class AddCommand(private val collectionManager: CollectionManager, private val c
             commandManager.removeLastCommand()
             return Response(ResponseStatus.OBJECT_REQUIRED, "Для команды $name требуется объект!")
         } else {
-            request.person?.id = collectionManager.getFreeId()
+            val newId = DatabaseConnector.personDatabase.insertObject(request.person!!, request.user).toLong()
+            if (newId == -1L) return Response(ResponseStatus.ERROR, "Не удалось добавить объект в базу данных.")
+            request.person!!.id = newId
+            request.person!!.creatorLogin = request.user.login
             collectionManager.addElement(request.person)
             return Response(ResponseStatus.OK, "Объект Person добавлен успешно!")
         }

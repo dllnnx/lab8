@@ -6,7 +6,7 @@ import java.util.Objects
  * Абстрактный класс для всех команд
  * @author dllnnx
  */
-abstract class Command(var name: String, private var description: String) : CommandInterface {
+abstract class Command(var name: String, var description: String) : CommandInterface {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || javaClass != other.javaClass) return false

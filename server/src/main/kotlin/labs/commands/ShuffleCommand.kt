@@ -11,7 +11,7 @@ import labs.utility.CollectionManager
  */
 class ShuffleCommand(private val collectionManager: CollectionManager) :
     Command("shuffle", ": перемешать элементы коллекции в случайном порядке.") {
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         if (request.args.isNotEmpty()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды не требуются аргументы!")
         }

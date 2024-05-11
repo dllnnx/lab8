@@ -1,11 +1,14 @@
 package labs.utility
 
 import labs.cli.forms.PersonForm
+import labs.cli.forms.UserForm
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
+import labs.dto.User
 import java.io.File
 import java.io.FileNotFoundException
+import java.util.Objects
 import java.util.Scanner
 import kotlin.NoSuchElementException
 import kotlin.system.exitProcess
@@ -23,8 +26,34 @@ class RuntimeManager(
     /**
      * Запускает работу программы в интерактивном режиме (в стандартной консоли).
      */
+    private lateinit var user: User
 
     fun interactiveMode() {
+        var response: Response? = null
+        var isLogin = true
+        do {
+            if (!Objects.isNull(response)) {
+                if (isLogin) {
+                    console.printError("Пользователь не найден, проверьте логин и пароль!")
+                } else {
+                    console.printError("Этот логин уже занят, попробуйте снова!")
+                }
+            }
+
+            isLogin = UserForm(console).askIfLogin()
+            user = UserForm(console).build()
+
+            response =
+                if (isLogin) {
+                    client.sendAndReceiveResponse(Request("login", "", user))
+                } else {
+                    client.sendAndReceiveResponse(Request("register", "", user))
+                }
+        } while (response!!.status != ResponseStatus.OK)
+        console.println(ConsoleColor.setConsoleColor("----------------------------------------------", ConsoleColor.GREEN))
+        console.println(ConsoleColor.setConsoleColor("---------- Вход в аккаунт выполнен! ----------", ConsoleColor.GREEN))
+        console.println(ConsoleColor.setConsoleColor("----------------------------------------------", ConsoleColor.GREEN))
+
         console.println("Чтобы увидеть список допустимых команд, введите help")
         while (true) {
             try {
@@ -34,7 +63,7 @@ class RuntimeManager(
                     return
                 }
                 val userCommand = (userScanner.nextLine().trim() + " ").split(" ", limit = 2)
-                val response = client.sendAndReceiveResponse(Request(userCommand[0].trim(), userCommand[1].trim()))
+                response = client.sendAndReceiveResponse(Request(userCommand[0].trim(), userCommand[1].trim(), user))
                 reactToResponse(response, userCommand)
             } catch (e: NoSuchElementException) {
                 console.printError("Пользовательский ввод не обнаружен! :(")
@@ -72,6 +101,7 @@ class RuntimeManager(
                 val person = PersonForm(console).build()
                 if (!Validator().validatePerson(person)) {
                     console.printError("Поля не валидны! Объект не создан :((")
+                    return
                 }
 
                 val newResponse =
@@ -80,6 +110,7 @@ class RuntimeManager(
                             userCommand[0].trim(),
                             userCommand[1].trim(),
                             person,
+                            user,
                         ),
                     )
 
@@ -136,7 +167,7 @@ class RuntimeManager(
                         ConsoleColor.CYAN,
                     ),
                 )
-                val response = client.sendAndReceiveResponse(Request(command[0].trim(), command[1].trim()))
+                val response = client.sendAndReceiveResponse(Request(command[0].trim(), command[1].trim(), user))
                 if ((command[0] == "execute_script")) {
                     Console.fileMode = true
                 }

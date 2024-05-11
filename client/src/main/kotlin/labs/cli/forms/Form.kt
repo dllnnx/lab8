@@ -42,7 +42,10 @@ abstract class Form<T>(console: Printable?) {
             try {
                 console.println("Введите $type$extraInf: ")
                 val input = scanner.nextLine()!!.trim { it <= ' ' }
-                require(validator.test(input))
+                if (!validator.test(input)) {
+                    if (Console.fileMode) return input
+                    throw IllegalArgumentException()
+                }
                 return input
             } catch (e: IllegalArgumentException) {
                 console.printError("$type должно быть типа String!$errMessage")
@@ -61,7 +64,7 @@ abstract class Form<T>(console: Printable?) {
         values: Array<Enum<*>>,
         enumName: String,
         validator: Predicate<String?>,
-    ): Enum<*> {
+    ): Any {
         while (true) {
             console.println("Возможные $enumName: ")
             for (value in values) {
@@ -70,7 +73,10 @@ abstract class Form<T>(console: Printable?) {
             console.println("Введите $enumName: ")
             val input = scanner.nextLine()!!.trim { it <= ' ' }
             try {
-                require(validator.test(input))
+                if (!validator.test(input)) {
+                    if (Console.fileMode) return input
+                    throw IllegalArgumentException()
+                }
                 for (value in values) {
                     if (value.toString() == input.uppercase(Locale.getDefault())) {
                         return value
@@ -102,7 +108,10 @@ abstract class Form<T>(console: Printable?) {
             val input = scanner.nextLine()!!.trim { it <= ' ' }
             try {
                 val num = input.toInt()
-                require(validator.test(num))
+                if (!validator.test(num)) {
+                    if (Console.fileMode) return num
+                    throw IllegalArgumentException()
+                }
                 return num
             } catch (e: IllegalArgumentException) {
                 console.printError("$type должно быть числом типа Integer!$errMessage")
@@ -129,7 +138,10 @@ abstract class Form<T>(console: Printable?) {
             val input = scanner.nextLine()!!.trim { it <= ' ' }
             try {
                 val num = input.toFloat()
-                require(validator.test(num))
+                if (!validator.test(num)) {
+                    if (Console.fileMode) return num
+                    throw IllegalArgumentException()
+                }
                 return num
             } catch (e: IllegalArgumentException) {
                 console.printError("$type должна быть числом типа Float!$errMessage")
@@ -156,7 +168,10 @@ abstract class Form<T>(console: Printable?) {
             val input = scanner.nextLine()!!.trim { it <= ' ' }
             try {
                 val num = input.toDouble()
-                require(validator.test(num))
+                if (!validator.test(num)) {
+                    if (Console.fileMode) return num
+                    throw IllegalArgumentException()
+                }
                 return num
             } catch (e: IllegalArgumentException) {
                 console.printError("$type должна быть числом типа Float!$errMessage")

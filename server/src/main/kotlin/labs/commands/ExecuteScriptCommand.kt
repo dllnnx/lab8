@@ -10,7 +10,7 @@ import labs.dto.ResponseStatus
  */
 class ExecuteScriptCommand() :
     Command("execute_script", " file_name: считать и исполнить скрипт из указанного файла.") {
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         if (request.args.isBlank()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды требуется аргумент!")
         }

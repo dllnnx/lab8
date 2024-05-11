@@ -9,7 +9,9 @@ import labs.commands.FilterContainsNameCommand
 import labs.commands.HelpCommand
 import labs.commands.HistoryCommand
 import labs.commands.InfoCommand
+import labs.commands.Login
 import labs.commands.MaxByNationalityCommand
+import labs.commands.Register
 import labs.commands.RemoveByIdCommand
 import labs.commands.RemoveFirstCommand
 import labs.commands.ShowCommand
@@ -18,7 +20,6 @@ import labs.commands.UpdateCommand
 import labs.utility.CollectionManager
 import labs.utility.CommandManager
 import labs.utility.Console
-import labs.utility.FileManager
 import labs.utility.RequestHandler
 import labs.utility.Server
 import org.apache.logging.log4j.kotlin.logger
@@ -26,6 +27,15 @@ import java.io.File
 import kotlin.properties.Delegates
 
 object Main {
+    // конфигурационные переменные
+    val DATABASE_CONFIG_PATH = Main.javaClass.classLoader.getResource("dbconfig.cfg")!!.path!!
+    const val DATABASE_URL = "jdbc:postgresql://localhost:5432/studs"
+    const val JDBC_HOST = "pg"
+    const val DATABASE_HOST = "se.ifmo.ru"
+    const val DATABASE_PORT = 2222
+    const val LOCAL_PORT = 5432
+    // конфигурационные переменные
+
     private var port by Delegates.notNull<Int>()
     private var console = Console()
     private var logger = logger()
@@ -49,10 +59,11 @@ object Main {
         logger.info("Порт успешно получен из аргументов командной строки.")
 
         logger.info("Создание объектов...")
+
         System.setProperty("file_path", File("data.json").absolutePath)
+        Class.forName("org.postgresql.Driver")
+
         val collectionManager = CollectionManager()
-        val fileManager = FileManager(console, collectionManager)
-        fileManager.fillCollection()
         logger.info("Коллекция успешно заполнена объектами из файла.")
 
         val commandManager = CommandManager()
@@ -73,11 +84,16 @@ object Main {
                 ShuffleCommand(collectionManager),
                 HistoryCommand(commandManager),
                 ExecuteScriptCommand(),
+                Register(),
+                Login(),
             ),
         )
         val requestHandler = RequestHandler(commandManager)
-        val server = Server(port, requestHandler, fileManager)
-        logger.info("Создан объект сервера.")
+        val server = Server(port, requestHandler)
+        logger.info("----------------------------------------------")
+        logger.info("--------------- СЕРВЕР ЗАПУЩЕН ---------------")
+        logger.info("----------------------------------------------")
+
         server.run()
     }
 }

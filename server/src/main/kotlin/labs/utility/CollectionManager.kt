@@ -1,7 +1,9 @@
 package labs.utility
 
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import labs.database.DatabaseConnector
 import labs.objects.Person
-import org.apache.logging.log4j.kotlin.logger
 import java.util.Date
 import java.util.LinkedList
 
@@ -10,124 +12,91 @@ import java.util.LinkedList
  * @author dllnnx
  */
 class CollectionManager {
-    /**
-     * Дата инициализации коллекции
-     */
     val initializationTime = Date()
     var collection: LinkedList<Person?> = LinkedList()
-    private val logger = logger()
+    private val mutex = Mutex()
 
-    /**
-     * Возвращает имя типа коллекции
-     * @return Имя типа коллекции
-     */
-    fun getCollectionType(): String {
-        return collection.javaClass.name
+    init {
+        collection.addAll(DatabaseConnector.personDatabase.fillCollection())
     }
 
-    /**
-     * Возвращает размер коллекции
-     * @return Размер коллекции
-     */
-    fun getCollectionSize(): Int {
-        return collection.size
+    suspend fun getCollectionType(): String {
+        mutex.withLock {
+            return collection.javaClass.name
+        }
     }
 
-    /**
-     * Добавляет элемент в коллекцию
-     * @param person Элемент для добавления.
-     */
-    fun addElement(person: Person?) {
-        person?.id = getFreeId()
-        collection.add(person)
+    suspend fun getCollectionSize(): Int {
+        mutex.withLock {
+            return collection.size
+        }
     }
 
-    fun updateById(
+    suspend fun addElement(person: Person?) {
+        mutex.withLock {
+            collection.add(person)
+        }
+    }
+
+    suspend fun updateById(
         person: Person?,
         id: Long,
     ) {
-        removeById(id)
-        person?.id = id
-        collection.add(person)
+        mutex.withLock {
+            collection.remove(getById(id))
+            person?.id = id
+            collection.add(person)
+        }
     }
 
-    /**
-     * Получает элемент коллекции по заданному значению id
-     * @param id id элемента
-     * @return Элемент по заданному значению id или null, если не найдено
-     */
     fun getById(id: Long): Person? {
         return collection.filter { it!!.id == id }.getOrElse(0) { null }
     }
 
-    /**
-     * Удаляет элемент коллекции по заданному значению id
-     * @param id id элемента
-     */
-    fun removeById(id: Long): Boolean {
-        if (getById(id) != null) {
-            collection.remove(getById(id))
-            return true
-        } else {
-            return false
+    suspend fun checkExistById(id: Long): Boolean {
+        mutex.withLock {
+            return collection.any { it!!.id == id }
         }
     }
 
-    /**
-     * Очищает коллекцию
-     */
-    fun clearCollection() {
-        collection.clear()
-        logger.info("Коллекция очищена")
-    }
-
-    /**
-     * Удаляет первый элемент коллекции
-     */
-    fun removeFirst() {
-        val firstPerson: Person = collection.toTypedArray()[0] as Person
-        collection.remove(firstPerson)
-    }
-
-    /**
-     * Находит элементы коллекции по заданному значению поля height
-     * @param height height элементов
-     * @return List из найденных элементов
-     */
-    fun getByHeight(height: Int): LinkedList<Person?> {
-        return collection.filter { it?.height == height }.toCollection(LinkedList<Person?>())
-    }
-
-    /**
-     * Находит элементы коллекции, значение поля name которых содержит заданную подстроку
-     * @param name Заданная подстрока
-     * @return List из найденных элементов
-     */
-    fun filterContainsName(name: String?): LinkedList<Person?> {
-        return collection.filter { it?.name?.contains(name.toString()) == true }.toCollection(LinkedList<Person?>())
-    }
-
-    /**
-     * Находит любой элемент коллекции, значение поля nationality которого является максимальным
-     * @return любой элемент коллекции, значение поля nationality которого является максимальным
-     */
-    fun maxByNationality(): Person? {
-        return collection.maxByOrNull { it!!.nationality.thousandsOfArea }
-    }
-
-    /**
-     * Перемешивает коллекцию.
-     */
-    fun shuffle() {
-        collection.shuffle()
-    }
-
-    fun getFreeId(): Long {
-        if (collection.isEmpty()) return 0
-        val ids = collection.map { it!!.id }.toMutableList()
-        for (i in 0..collection.maxOf { it!!.id }) {
-            if (!ids.contains(i)) return i
+    suspend fun removeById(id: Long): Boolean {
+        mutex.withLock {
+            if (getById(id) != null) {
+                collection.remove(getById(id))
+                return true
+            } else {
+                return false
+            }
         }
-        return collection.maxOf { it!!.id } + 1
+    }
+
+    suspend fun removeElements(ids: List<Long>) {
+        mutex.withLock {
+            ids.forEach { collection.remove(this.getById(it)) }
+        }
+    }
+
+    suspend fun getByHeight(height: Int): LinkedList<Person?> {
+        mutex.withLock {
+            return collection.filter { it?.height == height }.toCollection(LinkedList<Person?>())
+        }
+    }
+
+    suspend fun filterContainsName(name: String?): LinkedList<Person?> {
+        mutex.withLock {
+            return collection.filter { it?.name?.contains(name.toString()) == true }.toCollection(LinkedList<Person?>())
+        }
+    }
+
+    suspend fun maxByNationality(): Person? {
+        mutex.withLock {
+            return collection.maxByOrNull { it!!.nationality.thousandsOfArea }
+        }
+    }
+
+    suspend fun shuffle() {
+        mutex.withLock {
+            collection.shuffle()
+        }
     }
 }

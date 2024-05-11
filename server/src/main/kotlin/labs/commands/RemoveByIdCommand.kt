@@ -1,5 +1,6 @@
 package labs.commands
 
+import labs.database.DatabaseConnector
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
@@ -11,10 +12,11 @@ import labs.utility.CollectionManager
  */
 class RemoveByIdCommand(private val collectionManager: CollectionManager) :
     Command("remove_by_id", " id: удалить элемент из коллекции по его id.") {
-    override fun execute(request: Request): Response {
+    override suspend fun execute(request: Request): Response {
         if (request.args.isBlank()) {
             return Response(ResponseStatus.WRONG_ARGUMENTS, "Для этой команды требуется аргумент!")
         }
+
         if (request.args.split(" ").size != 1) {
             return Response(
                 ResponseStatus.WRONG_ARGUMENTS,
@@ -24,15 +26,22 @@ class RemoveByIdCommand(private val collectionManager: CollectionManager) :
         }
 
         try {
-            if (collectionManager.getCollectionSize() != 0) {
-                val id = request.args.trim().toLong()
-                return if (collectionManager.removeById(id)) {
-                    Response(ResponseStatus.OK, "Удаление элемента с id = $id произошло успешно!")
-                } else {
-                    Response(ResponseStatus.WARNING, "Нет элемента с таким id в коллекции!")
-                }
-            } else {
+            if (collectionManager.getCollectionSize() == 0) {
                 return Response(ResponseStatus.WARNING, "Коллекция пуста!")
+            }
+
+            val id = request.args.trim().toLong()
+
+            if (!collectionManager.checkExistById(id)) {
+                return Response(ResponseStatus.ERROR, "Нет элемента с таким id в коллекции!")
+            }
+
+            if (DatabaseConnector.personDatabase.deleteObjectById(id, request.user)) {
+                collectionManager.removeById(id)
+                println("HERE")
+                return Response(ResponseStatus.OK, "Удаление элемента с id = $id произошло успешно!")
+            } else {
+                return Response(ResponseStatus.ERROR, "Объект не удален. Удостоверьтесь, что он был создан Вами.")
             }
         } catch (e: IllegalArgumentException) {
             return Response(ResponseStatus.ERROR, "id должен быть типа long!")
