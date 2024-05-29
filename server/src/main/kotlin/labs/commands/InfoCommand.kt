@@ -20,7 +20,6 @@ class InfoCommand(private val collectionManager: CollectionManager) :
         }
         val resp =
             """
-            Информация о коллекции: 
             Тип коллекции: ${collectionManager.getCollectionType()}
             Количество элементов: ${collectionManager.getCollectionSize()}
             Дата инициализации: ${collectionManager.initializationTime}

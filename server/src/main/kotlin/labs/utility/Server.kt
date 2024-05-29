@@ -8,9 +8,11 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import labs.dto.Request
 import labs.dto.Response
+import labs.dto.ResponseStatus
 import org.apache.logging.log4j.kotlin.logger
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.StreamCorruptedException
@@ -52,10 +54,11 @@ class Server(private val port: Int, private val handler: RequestHandler) {
                         val keys = selector.selectedKeys().iterator()
                         while (keys.hasNext()) {
                             val key = keys.next()
-                            if (key.readyOps() == SelectionKey.OP_READ) {
+                            if (key.isValid && key.readyOps() == SelectionKey.OP_READ) {
                                 val clientChannel = key.channel() as SocketChannel
                                 val userRequest = getRequest(clientChannel)
-                                if (userRequest!!.commandName != "login" && userRequest.commandName != "register") {
+                                if (userRequest!!.commandName != "login" && userRequest.commandName != "register"
+                                    && userRequest.commandName != "exit" && userRequest.commandName != "show") {
                                     logger.info("Получен запрос от пользователя ${userRequest.user.login}.")
                                 }
                                 requestChannel.send(Pair(clientChannel, userRequest))
@@ -71,7 +74,8 @@ class Server(private val port: Int, private val handler: RequestHandler) {
                         val clientChannel = pair.first
                         val userRequest = pair.second
                         val responseToUser = handler.handle(userRequest)
-                        if (userRequest.commandName != "login" && userRequest.commandName != "register") {
+                        if (userRequest.commandName != "login" && userRequest.commandName != "register"
+                            && userRequest.commandName != "exit" && userRequest.commandName != "show") {
                             logger.info("Запрос пользователя ${userRequest.user.login} обработан.")
                         }
                         responseChannel.send(Pair(clientChannel, responseToUser))
@@ -83,8 +87,17 @@ class Server(private val port: Int, private val handler: RequestHandler) {
                     for (pair in responseChannel) {
                         val clientChannel = pair.first
                         val responseToUser = pair.second
-                        sendResponse(clientChannel, responseToUser)
-                        logger.info("Отправлен ответ клиенту.")
+                        if (responseToUser.status == ResponseStatus.EXIT) {
+                            withContext(Dispatchers.IO) {
+                                clientChannel.close()
+                            }
+                        }
+                        try {
+                            sendResponse(clientChannel, responseToUser)
+                            logger.info("Отправлен ответ клиенту.")
+                        } catch (_: IOException) {
+                            // такие вылезают когда клиент отключается. забиваем хуй на это пусть отключается спокойно
+                        }
                     }
                 }
 
@@ -121,8 +134,11 @@ class Server(private val port: Int, private val handler: RequestHandler) {
                 val userRequest = ois.readObject() as Request
                 ois.close()
                 return userRequest
-            } catch (_: StreamCorruptedException) {
+            } catch (e: StreamCorruptedException) {
                 // если считали объект не до конца - пробуем еще раз
+            } catch (e: IOException) {
+                // если клиентик отключается
+                return Request("exit")
             }
         }
     }
