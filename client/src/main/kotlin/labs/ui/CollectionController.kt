@@ -68,4 +68,8 @@ class CollectionController : Controller() {
         val response = client.sendAndReceiveResponse(Request("info", client.user))
         return response.message
     }
+
+    fun checkUserIsOwner(person: Person): Boolean {
+        return person.creatorLogin == client.user.login
+    }
 }

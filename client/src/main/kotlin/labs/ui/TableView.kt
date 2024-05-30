@@ -32,6 +32,8 @@ import tornadofx.px
 import tornadofx.right
 import tornadofx.selectedItem
 import tornadofx.style
+import tornadofx.tab
+import tornadofx.tabpane
 import java.time.format.DateTimeFormatter
 
 class TableView: View() {
@@ -42,30 +44,45 @@ class TableView: View() {
         addClass(Styles.heading)
 
         center {
-            tableview(holder.data) {
-                addClass(Styles.tableView)
+            tabpane {
+                addClass(Styles.tabpane)
+                tab("Таблица") {
+                    isClosable = false
 
-                primaryStage.isMaximized = true
-                title = "Обзор коллекции"
-                TableFilter.forTableView(this).apply()
+                    tableview(holder.data) {
+                        addClass(Styles.tableView)
 
-                column("id", Person::id)
-                column("name", Person::name)
-                column("coordinates_x", Person::coordinates).value { it.value.coordinates.x }
-                column("coordinates_y", Person::coordinates).value { it.value.coordinates.y }
-                column(
-                    "creation_date",
-                    Person::creationDate
-                ).value { it.value.creationDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy - HH:mm:ss z")) }
-                column("height", Person::height)
-                column("eye_color", Person::eyeColor)
-                column("hair_color", Person::hairColor)
-                column("nationality", Person::nationality)
-                column("location_x", Person::location).value { it.value.location.x }
-                column("location_y", Person::location).value { it.value.location.y }
-                column("location_name", Person::location).value { it.value.location.name }
-                column("creator_login", Person::creatorLogin)
+                        primaryStage.isMaximized = true
+                        title = "Обзор коллекции"
+                        TableFilter.forTableView(this).apply()
+
+                        column("id", Person::id)
+                        column("name", Person::name)
+                        column("coordinates_x", Person::coordinates).value { it.value.coordinates.x }
+                        column("coordinates_y", Person::coordinates).value { it.value.coordinates.y }
+                        column(
+                            "creation_date",
+                            Person::creationDate
+                        ).value { it.value.creationDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy - HH:mm:ss z")) }
+                        column("height", Person::height)
+                        column("eye_color", Person::eyeColor)
+                        column("hair_color", Person::hairColor)
+                        column("nationality", Person::nationality)
+                        column("location_x", Person::location).value { it.value.location.x }
+                        column("location_y", Person::location).value { it.value.location.y }
+                        column("location_name", Person::location).value { it.value.location.name }
+                        column("creator_login", Person::creatorLogin)
+                    }
+                }
+
+                tab("Визуализация") {
+                    isClosable = false
+
+
+                }
             }
+
+
         }
 
         top {

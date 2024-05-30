@@ -15,6 +15,8 @@ class Styles : Stylesheet() {
         val form by cssclass()
         val hyperlink by cssclass()
         val button by cssclass()
+        val tabpane by cssclass()
+        val tab by cssclass()
     }
 
     init {
@@ -25,6 +27,8 @@ class Styles : Stylesheet() {
         val usernameColor = c("#6A514B")
         val tableColor = c("#E3F1F7")
         val hoverColor = c("#87A0A0")
+        val selectedColor = c("#779192")
+        val tabHoverColor = c("#C8D1D1")
 
         root {
             backgroundColor += Color.WHITE
@@ -106,6 +110,23 @@ class Styles : Stylesheet() {
 
             and(hover){
                 backgroundColor += hoverColor
+            }
+        }
+
+        s(tabPane) {
+            backgroundColor += secondaryColor
+            fontSize = 12.px
+        }
+
+        s(tab) {
+            backgroundColor += secondaryColor
+
+            and(selected) {
+                backgroundColor += selectedColor
+            }
+
+            and(hover) {
+                backgroundColor += tabHoverColor
             }
         }
     }
