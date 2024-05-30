@@ -15,7 +15,7 @@ repositories {
 dependencies {
     testImplementation(kotlin("test"))
     implementation("com.google.code.gson:gson:2.9.1")
-    implementation ("no.tornado:tornadofx:1.7.20")
+    implementation("no.tornado:tornadofx:1.7.20")
     implementation("org.openjfx:javafx-controls:15.0.1")
 }
 

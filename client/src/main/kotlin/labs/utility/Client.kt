@@ -13,7 +13,7 @@ import java.net.ConnectException
 import java.net.Socket
 import java.util.Objects
 
-class Client: Controller() {
+class Client : Controller() {
     private var host: String = Main.host
     private var port = Main.port
     private var reconnectionTimeout = 2000L

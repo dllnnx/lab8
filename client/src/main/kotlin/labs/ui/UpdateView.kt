@@ -20,7 +20,7 @@ import tornadofx.form
 import tornadofx.label
 import tornadofx.textfield
 
-class UpdateView: View() {
+class UpdateView : View() {
     private val controller: CollectionController by inject()
     val person: Person by param()
 
@@ -37,115 +37,122 @@ class UpdateView: View() {
 
     private val wrongArgs = SimpleStringProperty()
 
-    override val root = form {
-        title = "Редактирование объекта"
-        addClass(Styles.form)
+    override val root =
+        form {
+            title = "Редактирование объекта"
+            addClass(Styles.form)
 
-        fieldset("Редактировать данные человека") {
-            field("Имя") {
-                textfield(name)
-            }
-
-            field("Координата X") {
-                textfield(cordX)
-            }
-
-            field("Координата Y") {
-                textfield(cordY)
-            }
-
-            field("Рост") {
-                textfield(persHeight)
-            }
-
-            field("Цвет глаз") {
-                combobox<String>(eyeColor) {
-                    items = FXCollections.observableArrayList("GREEN", "YELLOW", "WHITE")
+            fieldset("Редактировать данные человека") {
+                field("Имя") {
+                    textfield(name)
                 }
-            }
 
-            field("Цвет волос") {
-                combobox<String>(hairColor) {
-                    items = FXCollections.observableArrayList("GREEN", "BLACK", "ORANGE", "WHITE")
+                field("Координата X") {
+                    textfield(cordX)
                 }
-            }
 
-            field("Страна происхождения") {
-                combobox<String>(country) {
-                    items = FXCollections.observableArrayList("RUSSIA", "UNITED_KINGDOM", "ITALY")
+                field("Координата Y") {
+                    textfield(cordY)
                 }
-            }
 
-            field("Локация по X") {
-                textfield(locationX)
-            }
+                field("Рост") {
+                    textfield(persHeight)
+                }
 
-            field("Локация по Y") {
-                textfield(locationY)
-            }
+                field("Цвет глаз") {
+                    combobox<String>(eyeColor) {
+                        items = FXCollections.observableArrayList("GREEN", "YELLOW", "WHITE")
+                    }
+                }
 
-            field("Название локации") {
-                textfield(locationName)
-            }
+                field("Цвет волос") {
+                    combobox<String>(hairColor) {
+                        items = FXCollections.observableArrayList("GREEN", "BLACK", "ORANGE", "WHITE")
+                    }
+                }
+
+                field("Страна происхождения") {
+                    combobox<String>(country) {
+                        items = FXCollections.observableArrayList("RUSSIA", "UNITED_KINGDOM", "ITALY")
+                    }
+                }
+
+                field("Локация по X") {
+                    textfield(locationX)
+                }
+
+                field("Локация по Y") {
+                    textfield(locationY)
+                }
+
+                field("Название локации") {
+                    textfield(locationName)
+                }
 
                 button("Сохранить") {
                     alignment = Pos.CENTER
                     action {
-                        if (name.value?.isNotBlank() == true
-                            && cordX.value?.isNotBlank() == true
-                            && cordY.value?.isNotBlank() == true
-                            && persHeight.value?.isNotBlank() == true
-                            && eyeColor.value?.isNotBlank() == true
-                            && hairColor.value?.isNotBlank() == true
-                            && country.value?.isNotBlank() == true
-                            && locationX.value?.isNotBlank() == true
-                            && locationY.value?.isNotBlank() == true
-                            && locationName.value?.isNotBlank() == true) {
-                        val response = controller.updatePerson(
-                            person.id.toString(),
-                            name.value.trim(),
-                            cordX.value.trim(),
-                            cordY.value.trim(),
-                            persHeight.value.trim(),
-                            eyeColor.value.trim(),
-                            hairColor.value.trim(),
-                            country.value.trim(),
-                            locationX.value.trim(),
-                            locationY.value.trim(),
-                            locationName.value.trim()
-                        )
+                        if (name.value?.isNotBlank() == true &&
+                            cordX.value?.isNotBlank() == true &&
+                            cordY.value?.isNotBlank() == true &&
+                            persHeight.value?.isNotBlank() == true &&
+                            eyeColor.value?.isNotBlank() == true &&
+                            hairColor.value?.isNotBlank() == true &&
+                            country.value?.isNotBlank() == true &&
+                            locationX.value?.isNotBlank() == true &&
+                            locationY.value?.isNotBlank() == true &&
+                            locationName.value?.isNotBlank() == true
+                        ) {
+                            val response =
+                                controller.updatePerson(
+                                    person.id.toString(),
+                                    name.value.trim(),
+                                    cordX.value.trim(),
+                                    cordY.value.trim(),
+                                    persHeight.value.trim(),
+                                    eyeColor.value.trim(),
+                                    hairColor.value.trim(),
+                                    country.value.trim(),
+                                    locationX.value.trim(),
+                                    locationY.value.trim(),
+                                    locationName.value.trim(),
+                                )
 
-                        if (response.status == ResponseStatus.WRONG_ARGUMENTS)
-                            wrongArgs.set("Проверьте тип аргументов")
-                        else {
-                            clearFields()
-                            wrongArgs.set("")
-                            close()
-                            when (response.status) {
-                                ResponseStatus.OK ->
-                                    showAlert(Alert.AlertType.INFORMATION, "Успех", "Объект успешно изменен!")
+                            if (response.status == ResponseStatus.WRONG_ARGUMENTS) {
+                                wrongArgs.set("Проверьте тип аргументов")
+                            } else {
+                                clearFields()
+                                wrongArgs.set("")
+                                close()
+                                when (response.status) {
+                                    ResponseStatus.OK ->
+                                        showAlert(Alert.AlertType.INFORMATION, "Успех", "Объект успешно изменен!")
 
-                                ResponseStatus.WARNING ->
-                                    showAlert(Alert.AlertType.WARNING, "Предупреждение", response.message)
+                                    ResponseStatus.WARNING ->
+                                        showAlert(Alert.AlertType.WARNING, "Предупреждение", response.message)
 
-                                else ->
-                                    showAlert(Alert.AlertType.ERROR, "Ошибка при изменении объекта", response.message)
-
+                                    else ->
+                                        showAlert(Alert.AlertType.ERROR, "Ошибка при изменении объекта", response.message)
+                                }
                             }
+                        } else {
+                            wrongArgs.set("Все поля должны быть заполнены")
                         }
-                    } else wrongArgs.set("Все поля должны быть заполнены")
+                    }
                 }
+            }
+
+            label(wrongArgs) {
+                textFill = c("#D42C2C")
+                font = Font.font("Industrial", FontWeight.BOLD, 13.0)
             }
         }
 
-
-        label(wrongArgs) {
-            textFill = c("#D42C2C")
-            font = Font.font("Industrial", FontWeight.BOLD, 13.0)
-        }
-    }
-
-    private fun showAlert(alertType: Alert.AlertType, title: String, message: String) {
+    private fun showAlert(
+        alertType: Alert.AlertType,
+        title: String,
+        message: String,
+    ) {
         val alert = Alert(alertType)
         alert.title = title
         alert.headerText = null

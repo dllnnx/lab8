@@ -18,7 +18,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:1.6.0")
-    implementation ("no.tornado:tornadofx:1.7.20")
+    implementation("no.tornado:tornadofx:1.7.20")
     implementation("org.openjfx:javafx-controls:15.0.1")
 }
 

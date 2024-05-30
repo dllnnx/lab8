@@ -8,7 +8,7 @@ class Request(val commandName: String) : Serializable {
     var args = ""
     var person: Person? = null
 
-    constructor(commandName: String, user: User): this(commandName) {
+    constructor(commandName: String, user: User) : this(commandName) {
         this.user = user
     }
 

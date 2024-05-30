@@ -7,7 +7,6 @@ import javafx.scene.control.Alert
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import labs.dto.ResponseStatus
-import tornadofx.form
 import tornadofx.View
 import tornadofx.action
 import tornadofx.addClass
@@ -16,10 +15,11 @@ import tornadofx.c
 import tornadofx.combobox
 import tornadofx.field
 import tornadofx.fieldset
+import tornadofx.form
 import tornadofx.label
 import tornadofx.textfield
 
-class AddView: View() {
+class AddView : View() {
     private val controller: CollectionController by inject()
 
     private val name = SimpleStringProperty()
@@ -35,116 +35,118 @@ class AddView: View() {
 
     private val wrongArgs = SimpleStringProperty()
 
-    override val root = form {
-        title = "Добавление объекта"
-        addClass(Styles.form)
+    override val root =
+        form {
+            title = "Добавление объекта"
+            addClass(Styles.form)
 
-        fieldset("Данные человека") {
-            field("Имя") {
-                textfield(name)
-            }
-
-            field("Координата X") {
-                textfield(cordX)
-            }
-
-             field("Координата Y") {
-                textfield(cordY)
-            }
-
-            field("Рост") {
-                textfield(persHeight)
-            }
-
-            field("Цвет глаз") {
-                combobox<String>(eyeColor) {
-                    items = FXCollections.observableArrayList("GREEN", "YELLOW", "WHITE")
+            fieldset("Данные человека") {
+                field("Имя") {
+                    textfield(name)
                 }
-            }
 
-            field("Цвет волос") {
-                combobox<String>(hairColor) {
-                    items = FXCollections.observableArrayList("GREEN", "BLACK", "ORANGE", "WHITE")
+                field("Координата X") {
+                    textfield(cordX)
                 }
-            }
 
-            field("Страна происхождения") {
-                combobox<String>(country) {
-                    items = FXCollections.observableArrayList("RUSSIA", "UNITED_KINGDOM", "ITALY")
+                field("Координата Y") {
+                    textfield(cordY)
                 }
-            }
 
-            field("Локация по X") {
-                textfield(locationX)
-            }
+                field("Рост") {
+                    textfield(persHeight)
+                }
 
-            field("Локация по Y") {
-                textfield(locationY)
-            }
+                field("Цвет глаз") {
+                    combobox<String>(eyeColor) {
+                        items = FXCollections.observableArrayList("GREEN", "YELLOW", "WHITE")
+                    }
+                }
 
-            field("Название локации") {
-                textfield(locationName)
-            }
+                field("Цвет волос") {
+                    combobox<String>(hairColor) {
+                        items = FXCollections.observableArrayList("GREEN", "BLACK", "ORANGE", "WHITE")
+                    }
+                }
 
-            button("Добавить") {
-                alignment = Pos.CENTER
-                action {
-                    if (name.value?.isNotBlank() == true
-                        && cordX.value?.isNotBlank() == true
-                        && cordY.value?.isNotBlank() == true
-                        && persHeight.value?.isNotBlank() == true
-                        && eyeColor.value?.isNotBlank() == true
-                        && hairColor.value?.isNotBlank() == true
-                        && country.value?.isNotBlank() == true
-                        && locationX.value?.isNotBlank() == true
-                        && locationY.value?.isNotBlank() == true
-                        && locationName.value?.isNotBlank() == true) {
-                        val response = controller.addPerson(
-                            name.value.trim(),
-                            cordX.value.trim(),
-                            cordY.value.trim(),
-                            persHeight.value.trim(),
-                            eyeColor.value.trim(),
-                            hairColor.value.trim(),
-                            country.value.trim(),
-                            locationX.value.trim(),
-                            locationY.value.trim(),
-                            locationName.value.trim()
-                        )
+                field("Страна происхождения") {
+                    combobox<String>(country) {
+                        items = FXCollections.observableArrayList("RUSSIA", "UNITED_KINGDOM", "ITALY")
+                    }
+                }
 
-                        if (response.status == ResponseStatus.WRONG_ARGUMENTS)
-                            wrongArgs.set("Проверьте тип аргументов!")
-                         else {
-                            clearFields()
-                            wrongArgs.value = ""
-                            close()
+                field("Локация по X") {
+                    textfield(locationX)
+                }
 
-                            when (response.status) {
-                                ResponseStatus.OK ->
-                                    showAlert(
-                                        Alert.AlertType.INFORMATION,
-                                        "Успех",
-                                        "Объект успешно добавлен в коллекцию!"
-                                    )
+                field("Локация по Y") {
+                    textfield(locationY)
+                }
 
-                                ResponseStatus.WARNING -> showAlert(Alert.AlertType.WARNING, "Предупреждение", response.message)
+                field("Название локации") {
+                    textfield(locationName)
+                }
 
+                button("Добавить") {
+                    alignment = Pos.CENTER
+                    action {
+                        if (name.value?.isNotBlank() == true &&
+                            cordX.value?.isNotBlank() == true &&
+                            cordY.value?.isNotBlank() == true &&
+                            persHeight.value?.isNotBlank() == true &&
+                            eyeColor.value?.isNotBlank() == true &&
+                            hairColor.value?.isNotBlank() == true &&
+                            country.value?.isNotBlank() == true &&
+                            locationX.value?.isNotBlank() == true &&
+                            locationY.value?.isNotBlank() == true &&
+                            locationName.value?.isNotBlank() == true
+                        ) {
+                            val response =
+                                controller.addPerson(
+                                    name.value.trim(),
+                                    cordX.value.trim(),
+                                    cordY.value.trim(),
+                                    persHeight.value.trim(),
+                                    eyeColor.value.trim(),
+                                    hairColor.value.trim(),
+                                    country.value.trim(),
+                                    locationX.value.trim(),
+                                    locationY.value.trim(),
+                                    locationName.value.trim(),
+                                )
 
-                                else -> showAlert(Alert.AlertType.ERROR, "Ошибка при добавлении элемента", response.message)
+                            if (response.status == ResponseStatus.WRONG_ARGUMENTS) {
+                                wrongArgs.set("Проверьте тип аргументов!")
+                            } else {
+                                clearFields()
+                                wrongArgs.value = ""
+                                close()
 
+                                when (response.status) {
+                                    ResponseStatus.OK ->
+                                        showAlert(
+                                            Alert.AlertType.INFORMATION,
+                                            "Успех",
+                                            "Объект успешно добавлен в коллекцию!",
+                                        )
+
+                                    ResponseStatus.WARNING -> showAlert(Alert.AlertType.WARNING, "Предупреждение", response.message)
+
+                                    else -> showAlert(Alert.AlertType.ERROR, "Ошибка при добавлении элемента", response.message)
+                                }
                             }
+                        } else {
+                            wrongArgs.set("Заполните все поля!")
                         }
-                    } else wrongArgs.set("Заполните все поля!")
+                    }
                 }
             }
-        }
 
-
-        label(wrongArgs) {
-            textFill = c("#D42C2C")
-            font = Font.font("Industrial", FontWeight.BOLD, 13.0)
+            label(wrongArgs) {
+                textFill = c("#D42C2C")
+                font = Font.font("Industrial", FontWeight.BOLD, 13.0)
+            }
         }
-    }
 
     private fun clearFields() {
         name.set("")
@@ -159,7 +161,11 @@ class AddView: View() {
         locationName.set("")
     }
 
-    private fun showAlert(alertType: Alert.AlertType, title: String, message: String) {
+    private fun showAlert(
+        alertType: Alert.AlertType,
+        title: String,
+        message: String,
+    ) {
         val alert = Alert(alertType)
         alert.title = title
         alert.headerText = null

@@ -9,7 +9,7 @@ import tornadofx.Controller
 import tornadofx.asObservable
 import kotlin.concurrent.timer
 
-class CollectionHolder: Controller() {
+class CollectionHolder : Controller() {
     private val client: Client by inject<Client>()
     var data: ObservableList<Person> = FXCollections.observableArrayList()
 
@@ -21,9 +21,10 @@ class CollectionHolder: Controller() {
     }
 
     private fun updateData(): ObservableList<Person> {
-        val newData = client
-            .sendAndReceiveResponse(Request("show", client.user))
-            .collection!!.asObservable()
+        val newData =
+            client
+                .sendAndReceiveResponse(Request("show", client.user))
+                .collection!!.asObservable()
         data.setAll(newData)
         return data
     }

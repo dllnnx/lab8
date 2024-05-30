@@ -9,7 +9,6 @@ import labs.objects.EyeColor
 import labs.objects.HairColor
 import labs.objects.Location
 import labs.objects.Person
-import labs.shared.CollectionHolder
 import labs.utility.Client
 import tornadofx.Controller
 import java.time.ZonedDateTime
@@ -23,14 +22,30 @@ class CollectionController : Controller() {
         return response
     }
 
-    fun addPerson(name: String, cordX: String, cordY: String, persHeight: String, eyeColor: String, hairColor: String,
-                  country: String, locationX: String, locationY: String, locationName: String): Response {
+    fun addPerson(
+        name: String,
+        cordX: String,
+        cordY: String,
+        persHeight: String,
+        eyeColor: String,
+        hairColor: String,
+        country: String,
+        locationX: String,
+        locationY: String,
+        locationName: String,
+    ): Response {
         try {
-            val person = Person(
-                name, Coordinates(cordX.toFloat(), cordY.toDouble()), ZonedDateTime.now(), persHeight.toInt(),
-                EyeColor.valueOf(eyeColor), HairColor.valueOf(hairColor), Country.valueOf(country),
-                Location(locationX.toFloat(), locationY.toFloat(), locationName)
-            )
+            val person =
+                Person(
+                    name,
+                    Coordinates(cordX.toFloat(), cordY.toDouble()),
+                    ZonedDateTime.now(),
+                    persHeight.toInt(),
+                    EyeColor.valueOf(eyeColor),
+                    HairColor.valueOf(hairColor),
+                    Country.valueOf(country),
+                    Location(locationX.toFloat(), locationY.toFloat(), locationName),
+                )
             person.creatorLogin = client.user.login
             val response = client.sendAndReceiveResponse(Request("add", "", person, client.user))
             return response
@@ -39,14 +54,31 @@ class CollectionController : Controller() {
         }
     }
 
-    fun updatePerson(id: String, name: String, cordX: String, cordY: String, persHeight: String, eyeColor: String, hairColor: String,
-                     country: String, locationX: String, locationY: String, locationName: String) : Response {
+    fun updatePerson(
+        id: String,
+        name: String,
+        cordX: String,
+        cordY: String,
+        persHeight: String,
+        eyeColor: String,
+        hairColor: String,
+        country: String,
+        locationX: String,
+        locationY: String,
+        locationName: String,
+    ): Response {
         try {
-            val person = Person(
-                name, Coordinates(cordX.toFloat(), cordY.toDouble()), ZonedDateTime.now(), persHeight.toInt(),
-                EyeColor.valueOf(eyeColor), HairColor.valueOf(hairColor), Country.valueOf(country),
-                Location(locationX.toFloat(), locationY.toFloat(), locationName)
-            )
+            val person =
+                Person(
+                    name,
+                    Coordinates(cordX.toFloat(), cordY.toDouble()),
+                    ZonedDateTime.now(),
+                    persHeight.toInt(),
+                    EyeColor.valueOf(eyeColor),
+                    HairColor.valueOf(hairColor),
+                    Country.valueOf(country),
+                    Location(locationX.toFloat(), locationY.toFloat(), locationName),
+                )
             val response = client.sendAndReceiveResponse(Request("update", id, person, client.user))
             return response
         } catch (e: IllegalArgumentException) {

@@ -2,7 +2,11 @@ package labs.ui
 
 import javafx.scene.paint.Color
 import javafx.scene.text.FontWeight
-import tornadofx.*
+import tornadofx.Stylesheet
+import tornadofx.box
+import tornadofx.c
+import tornadofx.cssclass
+import tornadofx.px
 
 class Styles : Stylesheet() {
     companion object {
@@ -108,7 +112,7 @@ class Styles : Stylesheet() {
             borderWidth += box(1.px)
             borderColor += box(c("#254F57"))
 
-            and(hover){
+            and(hover) {
                 backgroundColor += hoverColor
             }
         }

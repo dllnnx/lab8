@@ -31,7 +31,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.2")
     implementation("com.github.mwiede:jsch:0.1.61")
     implementation("org.postgresql:postgresql:42.7.3")
-    implementation ("no.tornado:tornadofx:1.7.20")
+    implementation("no.tornado:tornadofx:1.7.20")
     implementation("org.openjfx:javafx-controls:15.0.1")
 }
 

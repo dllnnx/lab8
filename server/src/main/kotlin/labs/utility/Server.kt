@@ -57,8 +57,9 @@ class Server(private val port: Int, private val handler: RequestHandler) {
                             if (key.isValid && key.readyOps() == SelectionKey.OP_READ) {
                                 val clientChannel = key.channel() as SocketChannel
                                 val userRequest = getRequest(clientChannel)
-                                if (userRequest!!.commandName != "login" && userRequest.commandName != "register"
-                                    && userRequest.commandName != "exit" && userRequest.commandName != "show") {
+                                if (userRequest!!.commandName != "login" && userRequest.commandName != "register" &&
+                                    userRequest.commandName != "exit" && userRequest.commandName != "show"
+                                ) {
                                     logger.info("Получен запрос от пользователя ${userRequest.user.login}.")
                                 }
                                 requestChannel.send(Pair(clientChannel, userRequest))
@@ -74,8 +75,9 @@ class Server(private val port: Int, private val handler: RequestHandler) {
                         val clientChannel = pair.first
                         val userRequest = pair.second
                         val responseToUser = handler.handle(userRequest)
-                        if (userRequest.commandName != "login" && userRequest.commandName != "register"
-                            && userRequest.commandName != "exit" && userRequest.commandName != "show") {
+                        if (userRequest.commandName != "login" && userRequest.commandName != "register" &&
+                            userRequest.commandName != "exit" && userRequest.commandName != "show"
+                        ) {
                             logger.info("Запрос пользователя ${userRequest.user.login} обработан.")
                         }
                         responseChannel.send(Pair(clientChannel, responseToUser))

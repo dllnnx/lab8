@@ -4,9 +4,7 @@ import javafx.application.Application
 import labs.ui.ClientApp
 import labs.utility.Client
 import labs.utility.Console
-import labs.utility.RuntimeManager
 import labs.utility.ScriptManager
-import java.util.Scanner
 
 object Main {
     private val console = Console()
