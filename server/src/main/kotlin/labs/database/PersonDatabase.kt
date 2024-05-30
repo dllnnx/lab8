@@ -101,11 +101,11 @@ class PersonDatabase {
         }
     }
 
-    fun fillCollection(): LinkedList<Person?> {
+    fun fillCollection(): LinkedList<Person> {
         try {
             val ps = connection.prepareStatement(SQLCommands.getAllObjects)
             val resultSet = ps.executeQuery()
-            val collection = LinkedList<Person?>()
+            val collection = LinkedList<Person>()
             while (resultSet.next()) {
                 collection.add(
                     Person(
@@ -134,7 +134,7 @@ class PersonDatabase {
         } catch (e: SQLException) {
             logger.debug(e)
             logger.error("Не удалось загрузить коллекцию: коллекция пуста либо возникла ошибка при исполнении запроса.")
-            return LinkedList<Person?>()
+            return LinkedList<Person>()
         }
     }
 

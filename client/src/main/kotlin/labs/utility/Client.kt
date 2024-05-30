@@ -1,8 +1,11 @@
 package labs.utility
 
+import labs.Main
 import labs.dto.Request
 import labs.dto.Response
 import labs.dto.ResponseStatus
+import labs.dto.User
+import tornadofx.Controller
 import java.io.IOException
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
@@ -10,17 +13,16 @@ import java.net.ConnectException
 import java.net.Socket
 import java.util.Objects
 
-class Client(
-    private val host: String,
-    private val port: Int,
-    private val reconnectionTimeout: Long,
-    private val maxReconnectionAttempts: Int,
-    private val console: Printable,
-) {
+class Client : Controller() {
+    private var host: String = Main.host
+    private var port = Main.port
+    private var reconnectionTimeout = 2000L
+    private var maxReconnectionAttempts = 5
     private var socket: Socket? = null
     private var serverWriter: ObjectOutputStream? = null
     private var serverReader: ObjectInputStream? = null
     private var reconnectionAttempts = 0
+    var user: User = User("", "")
 
     private fun connectToServer() {
         socket = Socket(host, port)
@@ -55,15 +57,15 @@ class Client(
                 try {
                     when (e) {
                         is ConnectException, is IOException -> {
-                            if (reconnectionAttempts == 0) console.printError("Разорвано соединение с сервером!")
+                            if (reconnectionAttempts == 0) println("Разорвано соединение с сервером!")
                             reconnectionAttempts++
                             if (reconnectionAttempts >= maxReconnectionAttempts) {
-                                console.printError("Превышено максимальное количество попыток соединения с сервером.")
+                                println("Превышено максимальное количество попыток соединения с сервером.")
                                 disconnectFromServer()
                                 return Response(ResponseStatus.EXIT)
                             }
 
-                            console.println(
+                            println(
                                 ConsoleColor.setConsoleColor(
                                     "Повторная попытка подключения через $reconnectionTimeout ms",
                                     ConsoleColor.YELLOW,
@@ -75,7 +77,7 @@ class Client(
                         }
                     }
                 } catch (e: ConnectException) {
-                    console.printError("Попытка соединения с сервером неуспешна.")
+                    println("Попытка соединения с сервером неуспешна.")
                 }
             }
         }

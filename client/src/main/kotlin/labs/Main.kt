@@ -1,22 +1,23 @@
 package labs
 
+import javafx.application.Application
+import labs.ui.ClientApp
 import labs.utility.Client
 import labs.utility.Console
-import labs.utility.RuntimeManager
 import labs.utility.ScriptManager
-import java.util.Scanner
 
 object Main {
     private val console = Console()
     private val scriptManager = ScriptManager()
-    private lateinit var host: String
-    private var port: Int = 0
+    lateinit var host: String
+    var port: Int = 0
+    lateinit var client: Client
 
     @JvmStatic
     fun main(args: Array<String>) {
         if (!parseHostPort(args)) return
-        val client = Client(host, port, 2000, 5, console)
-        RuntimeManager(console, Scanner(System.`in`), client, scriptManager).interactiveMode()
+        Application.launch(ClientApp::class.java, *args)
+//        RuntimeManager(console, Scanner(System.`in`), client, scriptManager).interactiveMode()
     }
 
     private fun parseHostPort(args: Array<String>): Boolean {

@@ -13,7 +13,7 @@ import java.util.LinkedList
  */
 class CollectionManager {
     val initializationTime = Date()
-    var collection: LinkedList<Person?> = LinkedList()
+    var collection: LinkedList<Person> = LinkedList()
     private val mutex = Mutex()
 
     init {
@@ -34,7 +34,7 @@ class CollectionManager {
 
     suspend fun addElement(person: Person?) {
         mutex.withLock {
-            collection.add(person)
+            collection.add(person!!)
         }
     }
 
@@ -45,7 +45,7 @@ class CollectionManager {
         mutex.withLock {
             collection.remove(getById(id))
             person?.id = id
-            collection.add(person)
+            collection.add(person!!)
         }
     }
 
@@ -76,15 +76,15 @@ class CollectionManager {
         }
     }
 
-    suspend fun getByHeight(height: Int): LinkedList<Person?> {
+    suspend fun getByHeight(height: Int): LinkedList<Person> {
         mutex.withLock {
-            return collection.filter { it?.height == height }.toCollection(LinkedList<Person?>())
+            return collection.filter { it?.height == height }.toCollection(LinkedList<Person>())
         }
     }
 
-    suspend fun filterContainsName(name: String?): LinkedList<Person?> {
+    suspend fun filterContainsName(name: String?): LinkedList<Person> {
         mutex.withLock {
-            return collection.filter { it?.name?.contains(name.toString()) == true }.toCollection(LinkedList<Person?>())
+            return collection.filter { it?.name?.contains(name.toString()) == true }.toCollection(LinkedList<Person>())
         }
     }
 
